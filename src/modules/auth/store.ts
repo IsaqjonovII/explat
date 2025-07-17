@@ -19,7 +19,11 @@ interface IState {
 export const useAuthStore = defineStore("auth", {
   state: (): IState => ({
     tokens: {},
-    user: undefined,
+    user: {
+      id: "94532",
+      full_name: "Almamedov Khakim",
+      role: "trader",
+    },
     preloader: false,
     oneId: null,
   }),
@@ -29,6 +33,10 @@ export const useAuthStore = defineStore("auth", {
     getTokens: (state) => state.tokens,
     hasUser: (state) => Object.keys(state.user || {}).length > 0,
     authUser: (state) => state.user,
+    userRole: (state) => state.user?.role || "",
+    isAdmin: (state) => state.user?.role === "admin",
+    isUser: (state) => state.user?.role === "user",
+    isManager: (state) => state.user?.role === "manager",
   },
   actions: {
     initTokens() {

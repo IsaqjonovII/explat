@@ -1,29 +1,28 @@
 <template>
   <div
-      :class="[sizeClasses, avatarClass]"
-      class="rounded-full relative overflow-hidden after:absolute after:inset-0 after:rounded-full after:border after:border-solid after:border-white/16 shrink-0"
+    :class="[sizeClasses, avatarClass]"
+    class="rounded-full relative overflow-hidden after:absolute after:inset-0 after:rounded-full after:border after:border-solid after:border-white/16 shrink-0"
   >
     <!--    <BaseShimmer v-bind="{ loading }" width="100%" height="100%">-->
     <img
-        v-if="image"
-        :src="image"
-        alt="avatar-image"
-        class="w-full h-full object-cover"
+      v-if="image && loaded"
+      :src="image"
+      @error="imageLoadError"
+      alt="avatar-image"
+      class="w-full h-full object-cover"
     />
-    <img
-        v-else
-        alt="avatar-default-image"
-        class="w-full h-full object-cover"
-        src="/images/default/avatar.svg"
-    />
+    <div class="h-full flex-center" v-else>
+      <i class="icon-user text-3xl font-light text-gray-neutral" />
+    </div>
+
     <!--    </BaseShimmer>-->
   </div>
 </template>
 
 <script lang="ts" setup>
-import {computed} from "vue";
+import { computed, ref } from "vue";
 
-import type {TClassName} from "@/types/common";
+import type { TClassName } from "@/types/common";
 
 interface Props {
   image?: string;
@@ -37,6 +36,10 @@ const props = withDefaults(defineProps<Props>(), {
   avatarClass: undefined,
   image: undefined,
 });
+const loaded = ref(true);
+const imageLoadError = () => {
+  loaded.value = false;
+};
 
 const sizeClasses = computed(() => {
   const size = props.size;

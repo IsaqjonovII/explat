@@ -7,50 +7,22 @@
       head-class="cursor-pointer"
       @toggle="handleToggle"
     >
-      <template #head>
-        <div class="flex items-center gap-3">
-          <div v-if="isAuth" class="flex items-center gap-3">
-            <div class="h-max flex flex-col justify-center">
-              <span
-                class="text-sm font-medium text-dark text-right leading-20 !break-all max-w-[400px] line-clamp-1"
-                >{{ user?.full_name }}</span
-              >
-              <span class="text-sm text-gray text-right">
-                {{ $t("user") }}
-              </span>
-            </div>
-            <router-link to="/profile">
-              <BaseAvatar
-                avatar-class="w-9 h-9 rounded-md object-cover"
-                :image="user?.avatar_url || '/images/default-avatar.png'"
-              />
-            </router-link>
+      <template #trigger>
+        <div class="flex gap-3">
+          <div class="flex items-end flex-col">
+            <p class="font-semibold">
+              {{ user?.full_name }}
+            </p>
+            <p class="text-gray-10">{{ $t("roles." + user?.role) }}</p>
           </div>
-          <span
-            :class="{ 'rotate-180': show }"
-            class="icon-arrow-md text-2xl text-gray transition-300"
+          <BaseAvatar
+            avatar-class="!w-[50px] !h-[50px] object-cover"
+            :image="user?.avatar_url || '/images/default-avatar.png'"
           />
         </div>
       </template>
       <template #body>
         <div class="bg-white rounded-md profile-dropdown">
-          <div class="flex items-center gap-3 p-5 pt-6">
-            <router-link class="flex items-center gap-3 group" to="/profile">
-              <BaseAvatar
-                avatar-class="!w-[50px] !h-[50px] object-cover"
-                :image="user?.avatar_url || '/images/default-avatar.png'"
-              />
-              <div class="h-max flex flex-col justify-center">
-                <span
-                  class="text-sm font-medium text-dark text-right leading-20 !break-all max-w-[400px] line-clamp-1 group-hover:underline duration-300"
-                  >{{ user?.full_name }}</span
-                >
-                <span class="text-sm text-gray text-right">
-                  {{ $t("user") }}
-                </span>
-              </div>
-            </router-link>
-          </div>
           <router-link
             :to="{ name: 'Dashboard' }"
             class="flex flex-col gap-1 border-t border-[#E5EAEE]"

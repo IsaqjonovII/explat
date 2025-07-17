@@ -1,7 +1,29 @@
 {
+  "logout": "Выйти",
+  "graph": "Статистика",
+  "all": "Все",
+  "dashboard": {
+    "title": "Дашборд",
+    "balance": "Баланс:",
+    "received": "Принято",
+    "payouts": "Выплаты",
+    "inbound": "Входной",
+    "reserve": "Резерв"
+  },
   "menu": {
     "sidebar": {
-      "main": "Главная"
+      "main": "Дашборд",
+      "traders": "Трейдеры",
+      "orders": "Ордера",
+      "appeals": "Апелляции",
+      "requisites": "Реквизиты",
+      "balance": "Баланс",
+      "devices": "Устройства",
+      "notifications": "Уведомления",
+      "download": "Скачать Парсер",
+      "merchants": "Мерчанты",
+      "viplating": "Виплаты",
+      "admins": "Администраторы"
     },
     "breadcrumb": {
       "home": "Главная"
@@ -16,7 +38,51 @@
   "common": {
   },
   "button": {
+    "clear_filter": "Очистить фильтр"
   },
   "toast": {
-  }
+  },
+  "roles": {
+    "superadmin": "Суперадминистратор",
+    "admin": "Администратор",
+    "merchant": "Мерчант",
+    "trader": "Трейдер"
+  },
+  "course": "Курс Garantex",
+  "interval_of_time": "Промежуток времени",
+  "for_all_period": "За весь период",
+  "choose_period": "Выбрать период",
+  "today": "Сегодня",
+  "yesterday": "Вчера",
+  "week": "Неделя",
+  "month": "Месяц",
+  "year": "Год",
+  "this_week": "Текущая неделя",
+  "this_month": "Текущий месяц",
+  "this_year": "Текущий год",
+  "clear_filter": "Очистить фильтр",
+  "dd_mm_yyyy": "дд/мм/гггг",
+  "orders": {
+    "title": "Ордера",
+    "count":  "Общее количество ордеров: {count}",
+    "amount": "Сумма",
+    "device": "Устройство/id",
+    "payment_method": "Способ оплаты",
+    "status": "Статус",
+    "date": "Дата и время"
+  },
+  "filter": {
+    "status": "По статусу"
+  },
+  "statuses": {
+    "all_statuses": "Все статусы",
+    "success": "Успешно",
+    "pending": "В обработке",
+    "canceled": "Отклонён"
+  },
+  "dates": {
+    "created_at": "Создание:",
+    "end_at": "Обработка"
+  },
+  "search": "Поиск"
 }

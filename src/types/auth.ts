@@ -4,13 +4,13 @@ export interface IAuthTokens {
   refresh: string;
 }
 
-type TUserRole = "admin" | "review_moderator";
+type TUserRole = "admin" | "superadmin" | "merchant" | "trader";
 
 export interface IAuthUser {
   id: string;
   full_name: string;
   role: TUserRole;
-  avatar_url: null | string;
+  avatar_url?: null | string;
 }
 
 export interface IAccess {
