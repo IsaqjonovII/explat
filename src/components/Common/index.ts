@@ -20,3 +20,4 @@ export { default as CDevice } from "@/components/Common/MiniComponents/CDevice.v
 export { default as CReqisites } from "@/components/Common/MiniComponents/CRequisites.vue";
 export { default as CBadge } from "@/components/Common/MiniComponents/CBadge.vue";
 export { default as CDate } from "@/components/Common/MiniComponents/CDate.vue";
+export { default as CLimitIndicator } from "@/components/Common/MiniComponents/CLimitIndicator.vue";

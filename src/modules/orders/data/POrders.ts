@@ -30,8 +30,13 @@ export const tableHead = () => {
   const { t } = useI18n();
   return [
     {
-      title: "ID",
+      title: "№",
       key: "_index",
+    },
+    {
+      title: "ID",
+      key: "id",
+      hasSort: true,
     },
     {
       title: t("orders.amount"),

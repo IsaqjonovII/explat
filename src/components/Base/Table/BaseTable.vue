@@ -55,13 +55,13 @@
           </form>
           <BaseButton
             v-if="hasAddButton"
-            class="!py-2 !px-6"
+            class="!py-0 h-[40px] !px-6"
             @click="
               hasAddButton.link ? router.push(hasAddButton.link) : $emit('add')
             "
           >
             <div class="flex items-center gap-1">
-              <span class="text-xs text-dark-black leading-5 font-medium">
+              <span class="text-xs text-white leading-5 font-medium">
                 {{ hasAddButton.title }}
               </span>
               <i class="icon-plus text-lg"></i>

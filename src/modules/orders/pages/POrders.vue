@@ -12,6 +12,14 @@
         v-bind="tableSettings()"
         @click-to-row="openTransaction"
       >
+        <template #id="{ data }">
+          <div class="flex items-center gap-1">
+            <span class="text-sm font-medium text-dark-black">
+              {{ data?.id }}
+              <i class="icon-copy text-primary font-semibold" />
+            </span>
+          </div>
+        </template>
         <template #amount="{ data }">
           <CAmount
             :amount="data?.amount?.amount"
@@ -41,7 +49,12 @@
         </template>
 
         <template #date="{ data }">
-          <CDate :date="data?.created_at" :time="data?.created_at" />
+          <CDate
+            :pending_date="data?.pending_date"
+            :pending_time="data?.pending_time"
+            :date="data?.created_at"
+            :time="data?.created_at"
+          />
         </template>
 
         <template #filter>

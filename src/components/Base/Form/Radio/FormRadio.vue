@@ -49,7 +49,8 @@ const props = withDefaults(defineProps<Props>(), {
   size: 16,
   activeClass: "text-blue",
   labelStyles: "",
-  btnStyles: " group-hover:border-blue-primary peer-checked:border-primary",
+  btnStyles:
+    " group-hover:border-blue-primary peer-checked:border-primary peer-checked:border-4",
 });
 
 const emit = defineEmits<{

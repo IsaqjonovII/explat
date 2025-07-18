@@ -33,7 +33,11 @@
     "pagination": {
       "show": "Показать"
     },
-    "__comment": "Please, make it structured."
+    "__comment": "Please, make it structured.",
+    "upload": {
+      "add_photo": "Прикрепите Чек",
+      "max_size_photo": "Формат: pdf, png, jpeg, jpg"
+    }
   },
   "common": {
   },
@@ -72,7 +76,8 @@
     "date": "Дата и время"
   },
   "filter": {
-    "status": "По статусу"
+    "status": "По статусу",
+    "condition": "По состоянию"
   },
   "statuses": {
     "all_statuses": "Все статусы",
@@ -84,5 +89,97 @@
     "created_at": "Создание:",
     "end_at": "Обработка"
   },
-  "search": "Поиск"
+  "search": "Поиск",
+  "appeals": {
+    "title": "Апелляции",
+    "count":  "Общее количество апелляций: {count}",
+    "amount": "Сумма",
+    "device": "Устройство/id",
+    "payment_method": "Реквизиты",
+    "status": "Статус",
+    "date": "Дата и время",
+    "actions": "Действия"
+  },
+  "approve": "Закрыть",
+  "reject": "Отклонить",
+  "part": "Частично",
+  "reject1": "Полностью",
+  "reject_info": "Отклонение апелляции",
+  "rejecting": {
+    "title": "Причина отклонения:",
+    "title_text": "Напишите прчину отклонения апелляции",
+    "file": "Прикрепить файл:",
+    "cancel": "Отмена",
+    "reject": "Отклонить"
+  },
+  "requisites": {
+    "title": "Реквизиты",
+    "count":  "Общее количество реквизитов: {count}",
+    "requisites": "Реквизиты",
+    "balance": "Баланс",
+    "bank_method": "Банк/Метод",
+    "indicator": "Индикатор лимита",
+    "actions": "Действия"
+  },
+  "conditions": {
+    "test": "Тестировать",
+    "activate": "Активировать",
+    "deactivate": "Деактивировать",
+    "all": "Все состояния"
+  },
+  "add_requisite": "Добавить реквизит",
+  "add_requisite_modal": {
+    "placeholder_device_id": "Введите ID Девайса",
+    "device_id": "ID Девайса:",
+    "placeholder_bank":"Выберите Банк",
+    "bank":"Банк:",
+    "placeholder_name": "Введите имя",
+    "name": "ФИО:",
+    "placeholder_card_number":"Введите номер карты",
+    "card_number":"Номер карты:",
+    "placeholder_phone_number": "Введите номер телефона",
+    "phone_number": "Номер телефона:",
+    "placeholder_account_number":"Введите номер счета",
+    "account_number":"Номер счета:",
+    "placeholder_min_check": "Укажите минимальный чек",
+    "min_check": "Минимальный чек:",
+    "placeholder_max_check":"Укажите максимальный чек",
+    "max_check":"Максимальный чек:",
+    "placeholder_orders_count": "Количество ордеров",
+    "orders_count": "Кол-во ордеров в моменте:",
+    "placeholder_payment_method": "Выберите метод оплаты",
+    "payment_method":"Метод:"
+  },
+  "banks": {
+    "all": "Все банки",
+    "choose_bank": "Выберите банк"
+  },
+  "balance_page": {
+    "title": "Баланс",
+    "count": "Общее количество пополнений: {count}",
+    "date": "Дата и время",
+    "amount": "Сумма",
+    "course": "Курс",
+    "top_up": "Пополнить  usdt",
+    "acmount_usdt": "Количество usdt",
+    "tx_placeholder": "Вставьте TxID",
+    "network": "Сеть",
+    "wallet": "Кошельки"
+  },
+  "devices": {
+    "title": "Устройства",
+    "count":  "Общее количество устройств: {count}",
+    "number": "Номер телефона",
+    "battery": "Батарея",
+    "network": "Связь",
+    "model": "Модель",
+    "add": "Добавить устройство"
+  },
+  "copy": "Скопировать токен",
+  "notification": {
+    "title": "Уведомления",
+    "count":  "Общее количество уведомлений: {count}",
+    "date": "Дата и время",
+    "body": "СМС"
+  }
 }

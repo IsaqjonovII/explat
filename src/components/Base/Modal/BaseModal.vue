@@ -1,7 +1,7 @@
 <template>
   <Dialog v-model:open="isOpen">
     <DialogTrigger as-child>
-      <slot name="trigger"/>
+      <slot name="trigger" />
     </DialogTrigger>
 
     <DialogContent :class="wrpClass" class="sm:max-w-[425px]">
@@ -14,15 +14,7 @@
         </slot>
       </DialogHeader>
 
-      <slot/>
-
-      <DialogFooter>
-        <slot name="footer">
-          <BaseButton text="button.cancel" variant="neutral" @click="isOpen = false"/>
-
-          <BaseButton text="button.continue" @click="emit('submit')"/>
-        </slot>
-      </DialogFooter>
+      <slot />
     </DialogContent>
   </Dialog>
 </template>
@@ -32,19 +24,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import type {ModalProps} from "@/types/components";
-import {BaseButton} from "@/components/Base";
+} from "@/components/ui/dialog";
+import type { ModalProps } from "@/types/components";
 
-type Emits = {
-  (e: 'submit'): void;
-}
-
-defineProps<ModalProps>()
-const emit = defineEmits<Emits>()
-const isOpen = defineModel<boolean>({required: true})
+defineProps<ModalProps>();
+const isOpen = defineModel<boolean>({ required: true });
 </script>

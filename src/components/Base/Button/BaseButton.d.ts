@@ -3,5 +3,8 @@ export type TButtonVariants =
   | "danger"
   | "neutral"
   | "outline"
-  | "info";
+  | "info"
+  | "test"
+  | "activate"
+  | "deactivate";
 export type TButtonSizes = "sm" | "md" | "lg";

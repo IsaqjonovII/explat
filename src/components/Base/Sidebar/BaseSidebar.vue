@@ -165,7 +165,9 @@
             </div>
           </div>
         </div>
-        <div
+        <a
+          href="/parser.png"
+          download
           v-if="authStore?.role == 'trader'"
           class="w-[calc(100%-20px)] ml-auto h-px bg-white/10 my-4"
         >
@@ -175,7 +177,7 @@
               {{ $t("menu.sidebar.download") }}
             </span>
           </div>
-        </div>
+        </a>
       </div>
     </div>
 
