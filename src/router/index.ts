@@ -6,6 +6,7 @@ import RequisitesRoutes from "@/modules/requisites/routes";
 import BalanceRoutes from "@/modules/balance/routes";
 import DevicesRoutes from "@/modules/devices/routes";
 import NotificationRoutes from "@/modules/notification/routes";
+import AuthRoutes from "@/modules/auth/routes";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,7 @@ const router = createRouter({
     ...BalanceRoutes,
     ...DevicesRoutes,
     ...NotificationRoutes,
+    ...AuthRoutes,
   ],
 });
 
