@@ -46,6 +46,7 @@
             </div>
           </div>
         </div>
+
         <BaseHeaderProfile
           :is-auth="!!user"
           class="pl-4"
