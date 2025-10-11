@@ -11,13 +11,13 @@
         <div class="flex gap-3">
           <div class="flex items-end flex-col">
             <p class="font-semibold">
-              {{ user?.full_name }}
+              {{ user?.name }}
             </p>
             <p class="text-gray-10">{{ $t("roles." + user?.role) }}</p>
           </div>
           <BaseAvatar
             avatar-class="!w-[50px] !h-[50px] object-cover"
-            :image="user?.avatar_url || '/images/default-avatar.png'"
+            :image="'/images/default/avatar.svg'"
           />
         </div>
       </template>
@@ -30,7 +30,7 @@
           >
             <div
               class="text-sm !px-4 py-2 w-full transition-all duration-300 cursor-pointer text-gray-700 hover:bg-red-50 hover:text-red-500"
-              @click="$emit('logout')"
+              @click="logout"
             >
               <span class="mx-4">{{ $t("logout") }}</span>
             </div>
@@ -48,6 +48,7 @@ import { defineComponent, ref } from "vue";
 import BaseAvatar from "@/components/Base/Avatar/BaseAvatar.vue";
 import BaseDropdown from "@/components/Base/Dropdown/BaseDropdown.vue";
 import type { IAuthUser } from "@/types/auth";
+import { useAuth } from "@/modules/auth";
 
 defineComponent({
   name: "HeaderProfile",
@@ -65,6 +66,7 @@ interface Props {
 }
 
 defineProps<Props>();
+const { logout, user } = useAuth();
 const show = ref(false);
 
 function handleToggle(val: boolean, e: Event) {

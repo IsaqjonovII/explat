@@ -1,16 +1,16 @@
 <template>
   <div class="main-container w-full">
     <div
-        ref="editorContainerElement"
-        class="editor-container editor-container_classic-editor"
+      ref="editorContainerElement"
+      class="editor-container editor-container_classic-editor"
     >
       <div :class="{ error: error }" class="editor-container__editor">
         <div ref="editorElement">
           <ckeditor
-              v-if="editor && config"
-              v-model="modelValue"
-              :config="config"
-              :editor="editor"
+            v-if="editor && config"
+            v-model="modelValue"
+            :config="config"
+            :editor="editor"
           />
         </div>
       </div>
@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import "ckeditor5/ckeditor5.css";
 
-import {Ckeditor} from "@ckeditor/ckeditor5-vue";
+import { Ckeditor } from "@ckeditor/ckeditor5-vue";
 import {
   AutoImage,
   Autosave,
@@ -67,8 +67,8 @@ import {
 import enTranslations from "ckeditor5/translations/en.js";
 import ruTranslations from "ckeditor5/translations/ru.js";
 import uzTranslations from "ckeditor5/translations/uz.js";
-import {computed, onMounted, ref} from "vue";
-import {useI18n} from "vue-i18n";
+import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const LICENSE_KEY = import.meta.env.VITE_APP_CKEDITOR_KEY;
 
@@ -76,7 +76,7 @@ defineProps<{ error: boolean }>();
 const modelValue = defineModel<string>({
   required: true,
 });
-const {locale} = useI18n();
+const { locale } = useI18n();
 
 const isLayoutReady = ref(false);
 
@@ -301,11 +301,11 @@ const locales: Record<string, unknown> = {
 }
 
 .ck.ck-editor__main
-.ck-blurred.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline {
+  .ck-blurred.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline {
   &.error {
     @apply !border-red border;
   }
 
-  @apply !bg-white-1;
+  @apply !bg-gray-5;
 }
 </style>

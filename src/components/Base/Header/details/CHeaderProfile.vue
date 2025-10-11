@@ -11,14 +11,14 @@
             <span
               class="font-semibold text-dark-black text-right leading-130 !break-all max-w-[400px] line-clamp-1"
             >
-              {{ user?.full_name || "adminName" }}
+              {{ user?.name || "adminName" }}
             </span>
             <span class="text-sm text-gray-1 text-right">
               {{ $t(`roles.${user?.role || "admin"}`) }}
             </span>
           </div>
           <BaseAvatar
-            :image="user?.avatar_url || '/images/default/avatar.svg'"
+            :image="'/images/default/avatar.svg'"
             avatar-class="w-9 h-9 rounded-full object-cover"
           />
           <span
@@ -57,6 +57,7 @@ import { BaseAvatar, BaseButton, BaseDropdown } from "@/components/Base";
 import ConfirmModal from "@/components/Common/Modal/ConfirmModal.vue";
 import useToggle from "@/composables/useToggle";
 import { IAuthUser } from "@/types/auth";
+import { useAuth } from "@/modules/auth";
 
 defineComponent({
   name: "HeaderProfile",
@@ -76,13 +77,13 @@ interface Props {
 defineProps<Props>();
 
 const { isOpen, toggle } = useToggle();
+const { logout, user } = useAuth();
 const router = useRouter();
 
 const show = ref(false);
 
 function handleLogout() {
-  //   some log out function logic
-  router.push("/login");
+  logout();
 }
 </script>
 

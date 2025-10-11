@@ -1,16 +1,21 @@
 export interface IAuthTokens {
-  id: string;
   access: string;
   refresh: string;
 }
 
-type TUserRole = "admin" | "superadmin" | "merchant" | "trader";
+type TUserRole = "admin" | "superadmin" | "merchant" | "trader" | "unknown";
 
 export interface IAuthUser {
-  id: string;
-  full_name: string;
+  id: number;
+  name: string;
   role: TUserRole;
-  avatar_url?: null | string;
+  last_login: string;
+  date_joined: string;
+}
+
+export interface ILoginCredentials {
+  username: string;
+  password: string;
 }
 
 export interface IAccess {

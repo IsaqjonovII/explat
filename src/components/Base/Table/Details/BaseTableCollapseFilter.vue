@@ -60,7 +60,7 @@ const buttonClasses = computed(() => ({
         buttonClasses,
         { '!text-blue !bg-blue/10': show || activeCount },
       ]"
-      class="w-10 h-10 bg-white-1 text-gray-1 relative transition-all duration-300 rounded-md flex-center"
+      class="w-10 h-10 bg-gray-5 text-gray-1 relative transition-all duration-300 rounded-md flex-center"
       type="button"
       @click="handleClick"
     >

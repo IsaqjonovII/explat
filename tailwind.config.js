@@ -8,6 +8,51 @@ export default {
         3: "3px",
       },
       colors: {
+        // Millat color scheme
+        primary: "#111e2b",
+        secondary: "#606b8b",
+        white: "#ffffff",
+        brand: "#ffcb69",
+        "white-hover": "#f2f3f5",
+        divider: "#ebedf1",
+        yellow: "#ffbd14",
+        "yellow-1": "#f39c12",
+        red: "#f74c39",
+        blue: "#347bdf",
+        "blue-1": "#047bf3",
+        violet: "#8938fa",
+        orange: "#e59500",
+        "orange-2": "#f39c121f",
+        green: "#13bd62",
+        "green-excel": "#3a6c46",
+        "gray-1": "#8e9ba8",
+        "gray-2": "#8994b0",
+        "gray-3": "#b4b9cb",
+        "gray-4": "#e6e8ec",
+        "gray-5": "#f2f3f5",
+        "blue-male": "#2e77e5",
+        "pink-female": "#e52ed9",
+        "sidebar-hover": "#1c2836",
+
+        // Input colors
+        input: "#f2f3f5",
+        "input-border": "#e6e8ec",
+        "input-placeholder": "#b4b9cb",
+        "input-disabled": "#e6e8ec",
+        "input-focus": "#ffcb69",
+        "input-text": "#606b8b",
+
+        // Toast colors
+        toast: "#111e2b",
+        "toast-text": "#ffffff",
+        "toast-border": "#gray-700",
+        "toast-icon": "#b4b9cb",
+
+        // Table colors
+        "table-even-row": "#f2f3f5",
+        "table-row-hover": "#e6e8ec",
+
+        // Legacy colors for compatibility
         stats: {
           "blue-light": "#4489F7",
           green: "#23DB9F",
@@ -18,24 +63,11 @@ export default {
           purple: "#C2278D",
           red: "#FF5252",
         },
-        primary: {
-          DEFAULT: "#2E77E5",
-        },
-        white: {
-          DEFAULT: "#FFFFFF",
-          1: "#F3F5F4",
-          2: "#EDF0F2",
-        },
         dark: {
           black: "#090E14",
           DEFAULT: "#061018",
           1: "#111014",
           2: "#090E14",
-        },
-        blue: {
-          DEFAULT: "#2684FC",
-          dark: "#2E77E5",
-          light: "#519DFD",
         },
         gray: {
           neutral: "#8E9BA8",

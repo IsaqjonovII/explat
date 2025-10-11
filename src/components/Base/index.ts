@@ -30,6 +30,7 @@ export { default as FormLabel } from "@/components/Base/Form/Label/FormLabel.vue
 export { default as FormRadio } from "@/components/Base/Form/Radio/FormRadio.vue";
 export { default as FormRadioGroup } from "@/components/Base/Form/Radio/FormRadioGroup.vue";
 export { default as FormSelect } from "@/components/Base/Form/Select/FormSelect.vue";
+export { default as FormSelectInfinitive } from "@/components/Base/Form/Select/FormSelectInfinitive.vue";
 export { default as FormTextarea } from "@/components/Base/Form/Textarea/Textarea.vue";
 export { default as FormToggle } from "@/components/Base/Form/Toggle/FormToggle.vue";
 export { default as BaseImageUploader } from "@/components/Base/Form/Uploader/BaseImageUploader.vue";
@@ -57,10 +58,11 @@ export { default as BaseTab } from "@/components/Base/Tab/BaseTab.vue";
 //* --\*_*/-- Table Components
 export { default as BaseCell } from "@/components/Base/Table/BaseCell.vue";
 export { default as BaseTable } from "@/components/Base/Table/BaseTable.vue";
-export { default as TableHeader } from "@/components/Base/Table/Details/TableHeader.vue";
+export { default as BaseTableHeader } from "@/components/Base/Table/Details/TableHeader.vue";
 export { default as BasePagination } from "@/components/Base/Pagination/BasePagination.vue";
 export { default as BaseTableCollapseFilter } from "@/components/Base/Table/Details/BaseTableCollapseFilter.vue";
 export { default as BaseTableIndicator } from "@/components/Base/Table/Details/BaseTableIndicator.vue";
+export { default as TableFilter } from "@/components/Base/Table/TableFilter.vue";
 
 //* --\*_*/-- Tag Count Components
 export { default as BaseTagCount } from "@/components/Base/TagCount/BaseTagCount.vue";

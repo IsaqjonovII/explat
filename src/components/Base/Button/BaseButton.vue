@@ -68,8 +68,8 @@ const { t } = useI18n();
 const variants: Record<TButtonVariants, TClassName> = {
   primary: "bg-blue-dark text-white hover:bg-blue ",
   danger: "bg-red/10 text-red hover:bg-red/20 disabled:text-gray-1",
-  outline: "border border-gray-3 text-dark hover:bg-white-1",
-  neutral: "bg-white-1 hover:bg-gray-4 text-dark disabled:text-gray-1",
+  outline: "border border-gray-3 text-dark hover:bg-gray-5",
+  neutral: "bg-gray-5 hover:bg-gray-4 text-dark disabled:text-gray-1",
   info: "bg-blue/10 text-blue hover:bg-blue/20 disabled:text-gray-1",
   test: "bg-yellow-dark/10 text-yellow-dark hover:bg-yellow-dark hover:text-white  disabled:text-gray-1",
   activate:
@@ -81,7 +81,7 @@ const variants: Record<TButtonVariants, TClassName> = {
 const sizes: Record<TButtonSizes, TClassName> = {
   sm: "py-2 !px-4 text-xs font-medium rounded-md h-10",
   md: "py-2.5 px-6 font-medium text-base rounded-lg",
-  lg: "p-1.5 font-medium text-base rounded-lg bg-white-1 border-none",
+  lg: "p-1.5 font-medium text-base rounded-lg bg-gray-5 border-none",
 };
 
 const loaderPathClass = computed(() => {

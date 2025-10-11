@@ -4,21 +4,26 @@
     <FormGroup class="mt-3" :label="$t('login')">
       <FormInput
         :placeholder="$t('login_placeholder')"
-        :error="form.$v.value.login.$error"
-        v-model="form.values.login"
+        :error="form.$v.value.username.$error"
+        v-model="form.values.username"
+        :disabled="isLoggingIn()"
       />
     </FormGroup>
     <FormGroup class="mt-5" :label="$t('password')">
       <FormInput
         :placeholder="$t('password_placeholder')"
-        :error="form.$v.value.password.$error"
+        :error="form.$v.value.password?.$error"
         v-model="form.values.password"
+        type="password"
+        :disabled="isLoggingIn()"
       />
     </FormGroup>
+
     <BaseButton
-      :text="$t('sign')"
+      :text="isLoggingIn() ? 'Signing in...' : $t('sign')"
       class="w-full mt-5"
       variant="primary"
+      :disabled="isLoggingIn()"
       @click="signIn"
     />
   </div>
@@ -28,18 +33,19 @@
 import { BaseButton, FormGroup, FormInput } from "@/components/Base";
 import { useForm } from "@/composables/useForm";
 import { required } from "@vuelidate/validators";
-import { useRouter } from "vue-router";
+import { useAuth } from "../composables/useAuth";
 
-const router = useRouter();
+const { login, isLoggingIn } = useAuth();
+
 const form = useForm(
   {
-    login: "",
+    username: "",
     password: "",
   },
   {
-    login: { required },
+    username: { required },
     password: { required },
-  },
+  }
 );
 
 const signIn = () => {
@@ -47,6 +53,10 @@ const signIn = () => {
   if (form.$v.value.$invalid) {
     return;
   }
-  router.push({ name: "Dashboard" });
+
+  login({
+    username: form.values.username,
+    password: form.values.password,
+  });
 };
 </script>

@@ -1,84 +1,411 @@
-@import url('../icomoon/style.css');
-@import url('./_toastification.css');
+@import url("../icomoon/style.css");
+@import url("./_toastification.css");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-    .fade-enter-active {
-        @apply transition-300
+  .shimmer {
+    background-color: #f6f7f8;
+    background-image: linear-gradient(
+      to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: inline-block;
+    position: relative;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeholderShimmer;
+    animation-timing-function: linear;
+    border-radius: 12px;
+  }
+
+  @keyframes placeholderShimmer {
+    0% {
+      background-position: -468px 0;
     }
 
-    .fade-leave-active {
-        transition: all 0.2s ease-out;
+    100% {
+      background-position: 468px 0;
+    }
+  }
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-brand) transparent;
+    @apply border-divider m-0 p-0 box-border;
+  }
+
+  .fade-enter-active {
+    transition: all 0.2s ease-in;
+  }
+
+  .fade-leave-active {
+    transition: all 0.2s ease-out;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .dropdown-enter-active {
+    animation: dropdown 0.1s linear;
+  }
+
+  .dropdown-leave-active {
+    animation: dropdown 0.1s linear reverse;
+  }
+
+  .modal-enter-active {
+    animation: modal 200ms ease-out forwards;
+  }
+
+  .modal-leave-active {
+    animation: modal 200ms ease-in reverse forwards;
+  }
+
+  @keyframes modal {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
     }
 
-    .fade-enter-from,
-    .fade-leave-to {
-        opacity: 0;
+    100% {
+      opacity: 1;
+      transform: scale(1);
     }
+  }
+
+  .animated {
+    animation: animatedIn 0.4s ease-in-out;
+  }
+
+  @keyframes animatedIn {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.03);
+    }
+
+    70% {
+      transform: scale(0.95);
+    }
+  }
+
+  /* Slide-Right Animation */
+  @keyframes slideRight {
+    0% {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .slide-right-enter-active {
+    animation: slideRight 0.3s ease-out forwards;
+  }
+
+  .slide-right-leave-active {
+    animation: slideRight 0.3s ease-in reverse forwards;
+  }
+
+  /* Slide-Left Animation */
+  @keyframes slideLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .slide-left-enter-active {
+    animation: slideLeft 0.3s ease-out forwards;
+  }
+
+  .slide-left-leave-active {
+    animation: slideLeft 0.3s ease-in reverse forwards;
+  }
+
+  /* Slide-up Animation */
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .slide-up-enter-active {
+    animation: slideUp 0.2s ease-out forwards;
+  }
+
+  .slide-up-leave-active {
+    animation: slideUp 0.2s ease-in reverse forwards;
+  }
+
+  /* Firefox Scrollbar Styles */
+  /* For Firefox */
+  *::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply bg-orange;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+  }
+
+  /* INDICATOR */
+  .green::before,
+  .red::before,
+  .yellow::before,
+  .gray::before,
+  .blue::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 32px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .green::before {
+    @apply bg-green;
+  }
+
+  .red::before {
+    @apply bg-red;
+  }
+
+  .gray::before {
+    @apply bg-gray-4;
+  }
+
+  .yellow::before {
+    @apply bg-yellow;
+  }
+
+  /*.blue::before {*/
+  /*  @apply bg-blue;*/
+  /*}*/
+  .indicator.green {
+    @apply border-green;
+  }
+
+  .indicator.red {
+    @apply border-red;
+  }
+
+  .indicator.gray {
+    @apply border-gray-4;
+  }
+
+  .indicator.yellow {
+    @apply border-yellow;
+  }
+
+  /*.indicator.blue {*/
+  /*  @apply border-blue;*/
+  /*}*/
+  .loader {
+    width: 50px;
+    aspect-ratio: 1;
+    display: grid;
+    border: 4px solid #0000;
+    border-radius: 50%;
+    animation: l15 1s infinite linear;
+    @apply border-r-blue;
+  }
+
+  .loader::before,
+  .loader::after {
+    content: "";
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
+  }
+
+  .loader::after {
+    margin: 8px;
+    animation-duration: 3s;
+  }
+
+  @keyframes l15 {
+    100% {
+      transform: rotate(1turn);
+    }
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    background: #f7faf8;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 }
 
 @layer utilities {
-    /* Transition */
-    .transition-300 {
-        @apply transition-all duration-300;
-    }
+  /* Transition */
+  .transition-300 {
+    @apply transition-all duration-300;
+  }
 
-    .transition-200 {
-        @apply transition-all duration-200;
-    }
+  .transition-200 {
+    @apply transition-all duration-200;
+  }
 
-    /* Position */
-    .absolute-x {
-        @apply absolute -translate-x-1/2 left-1/2;
-    }
+  /* Position */
+  .absolute-x {
+    @apply absolute -translate-x-1/2 left-1/2;
+  }
 
-    .absolute-y {
-        @apply absolute -translate-y-1/2 top-1/2;
-    }
+  .absolute-y {
+    @apply absolute -translate-y-1/2 top-1/2;
+  }
 
-    .absolute-center {
-        @apply absolute-x absolute-y;
-    }
+  .absolute-center {
+    @apply absolute-x absolute-y;
+  }
 
-    /* Flex */
-    .flex-y-center {
-        @apply flex items-center;
-    }
+  /* Flex */
+  .flex-y-center {
+    @apply flex items-center;
+  }
 
-    .flex-x-center {
-        @apply flex justify-center;
-    }
+  .flex-x-center {
+    @apply flex justify-center;
+  }
 
-    .flex-center {
-        @apply flex justify-center items-center;
-    }
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
 
-    .flex-center-between {
-        @apply flex justify-between items-center;
-    }
+  .flex-center-between {
+    @apply flex justify-between items-center;
+  }
 
-    .flex-between {
-        @apply flex justify-between;
-    }
+  .flex-between {
+    @apply flex justify-between;
+  }
+
+  .dropdown-content-width-full {
+    /* INFO: to make shadcn components' (dropdown mainly) cover their parents' width */
+    width: var(--radix-dropdown-menu-trigger-width) !important;
+    max-height: var(--radix-dropdown-menu-content-available-height) !important;
+  }
+
+  .after-border {
+    @apply relative after:absolute after:inset-0 after:rounded-full after:border after:border-solid after:border-white/15;
+  }
+
+  .sidebar-circle-gradient {
+    @apply absolute top-[77px] left-0 w-full h-[620px] before:absolute before:left-0 before:top-[-50px] before:h-[620px] before:w-full z-1 before:z-0 before:bg-no-repeat before:bg-cover;
+  }
+
+  .separator {
+    @apply h-px bg-gray-4 my-1;
+  }
+
+  .status {
+    @apply p-1 rounded text-xs uppercase font-bold;
+  }
+
+  .status-success {
+    @apply bg-green/10 text-green;
+  }
+
+  .status-error {
+    @apply bg-red/10 text-red;
+  }
+
+  .status-warning {
+    @apply bg-yellow/10 text-yellow;
+  }
+
+  .status-cancelled {
+    @apply bg-gray-4 text-gray-8;
+  }
+
+  .highlight {
+    @apply bg-orange text-white rounded px-px;
+  }
+
+  .yellow-gradient {
+    @apply bg-gradient-to-bl from-yellow to-orange disabled:bg-gradient-to-b disabled:from-transparent disabled:to-transparent;
+  }
+
+  .section-block {
+    @apply bg-white p-5 rounded-xl;
+  }
 }
 
 @layer components {
-    .after-border {
-        @apply relative after:absolute after:inset-0 after:rounded-full after:border after:border-solid after:border-white/15
-    }
+  .after-border {
+    @apply relative after:absolute after:inset-0 after:rounded-full after:border after:border-solid after:border-white/15;
+  }
 
-    .sidebar-circle-gradient {
-        @apply absolute top-[77px] left-0 w-full h-[620px] before:absolute before:left-0 before:top-[-50px] before:h-[620px] before:w-full z-[1] before:z-0 before:bg-no-repeat before:bg-cover;
-    }
+  .sidebar-circle-gradient {
+    @apply absolute top-[77px] left-0 w-full h-[620px] before:absolute before:left-0 before:top-[-50px] before:h-[620px] before:w-full z-[1] before:z-0 before:bg-no-repeat before:bg-cover;
+  }
 
-    .separator {
-        @apply h-px bg-white-1 my-1
-    }
+  .separator {
+    @apply h-px bg-gray-4 my-1;
+  }
 
-    .status {
-        @apply px-2 py-1 rounded-md
-    }
+  .status {
+    @apply px-2 py-1 rounded-md;
+  }
 }

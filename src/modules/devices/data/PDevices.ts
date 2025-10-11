@@ -10,18 +10,13 @@ export const devicesFilterStatus = () => {
     },
     {
       id: 2,
-      name: t("statuses.success"),
-      key: "success",
+      name: t("devices.status.active"),
+      key: "active",
     },
     {
       id: 3,
-      name: t("statuses.canceled"),
-      key: "canceled",
-    },
-    {
-      id: 4,
-      name: t("statuses.pending"),
-      key: "pending",
+      name: t("devices.status.inactive"),
+      key: "inactive",
     },
   ];
 };
@@ -39,13 +34,18 @@ export const tableHead = () => {
       hasSort: true,
     },
     {
+      title: t("devices.name"),
+      key: "name",
+      hasSort: true,
+    },
+    {
       title: t("devices.model"),
       key: "model",
       hasSort: true,
     },
     {
-      title: t("devices.number"),
-      key: "number",
+      title: t("devices.phone_number"),
+      key: "phone_number",
       hasSort: true,
     },
     {
@@ -54,9 +54,24 @@ export const tableHead = () => {
       hasSort: true,
     },
     {
-      title: t("devices.network"),
-      key: "network",
+      title: t("devices.carrier"),
+      key: "carrier",
       hasSort: true,
+    },
+    {
+      title: t("devices.status"),
+      key: "status",
+      hasSort: true,
+    },
+    {
+      title: t("devices.availability"),
+      key: "is_available",
+      hasSort: true,
+    },
+    {
+      title: t("devices.actions"),
+      key: "actions",
+      hasSort: false,
     },
   ];
 };
@@ -65,28 +80,88 @@ export const tableSettings = () => {
   const { t } = useI18n();
   return {
     noData: {
-      title: t("transactions_not_found"),
-      subtitle: t("transactions_not_found_try_again_later"),
-      image: "/images/no-data/transactions.png",
+      title: t("no_data.title"),
+      subtitle: t("no_data.subtitle"),
+      icon: "icon-phone",
+      hasAction: false,
     },
     thClass: "last:!text-left",
   };
 };
 
-export const filterTypes = () => {
+export const devicesFilterCarrier = () => {
   const { t } = useI18n();
   return [
     {
+      id: 1,
       name: t("all"),
       key: "all",
     },
     {
-      name: t("market.types.buy"),
-      key: "buy",
+      id: 2,
+      name: "Beeline",
+      key: "beeline",
     },
     {
-      name: t("market.types.sell"),
-      key: "sell",
+      id: 3,
+      name: "Ucell",
+      key: "ucell",
+    },
+    {
+      id: 4,
+      name: "UzMobile",
+      key: "uzmobile",
+    },
+    {
+      id: 5,
+      name: "Mobiuz",
+      key: "mobiuz",
+    },
+  ];
+};
+
+export const devicesOrderingOptions = () => {
+  const { t } = useI18n();
+  return [
+    {
+      id: 1,
+      name: t("devices.ordering.id_asc"),
+      key: "id",
+    },
+    {
+      id: 2,
+      name: t("devices.ordering.id_desc"),
+      key: "-id",
+    },
+    {
+      id: 3,
+      name: t("devices.ordering.name_asc"),
+      key: "name",
+    },
+    {
+      id: 4,
+      name: t("devices.ordering.name_desc"),
+      key: "-name",
+    },
+    {
+      id: 5,
+      name: t("devices.ordering.battery_asc"),
+      key: "battery",
+    },
+    {
+      id: 6,
+      name: t("devices.ordering.battery_desc"),
+      key: "-battery",
+    },
+    {
+      id: 7,
+      name: t("devices.ordering.created_asc"),
+      key: "created_at",
+    },
+    {
+      id: 8,
+      name: t("devices.ordering.created_desc"),
+      key: "-created_at",
     },
   ];
 };

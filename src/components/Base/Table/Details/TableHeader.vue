@@ -1,5 +1,5 @@
 <template>
-  <header class="flex-center-between gap-4" :class="$attrs.class">
+  <header class="flex-center-between gap-4" :class="$attrs['class']">
     <div>
       <h2
         :class="titleClass"
@@ -15,7 +15,7 @@
       </p>
     </div>
 
-    <slot v-if="$slots.right" name="right" />
+    <slot v-if="$slots['right']" name="right" />
   </header>
 </template>
 

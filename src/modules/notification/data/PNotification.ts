@@ -55,9 +55,10 @@ export const tableSettings = () => {
   const { t } = useI18n();
   return {
     noData: {
-      title: t("transactions_not_found"),
-      subtitle: t("transactions_not_found_try_again_later"),
-      image: "/images/no-data/transactions.png",
+      title: t("no_data.title"),
+      subtitle: t("no_data.subtitle"),
+      icon: "icon-bell",
+      hasAction: false,
     },
     thClass: "last:!text-left",
   };

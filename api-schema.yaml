@@ -1,0 +1,1516 @@
+openapi: 3.0.3
+info:
+  title: Explat Project API
+  version: 0.0.1
+  description: ' Project description'
+paths:
+  /ru/api/v1/auth/token/:
+    post:
+      operationId: auth_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /ru/api/v1/auth/token/refresh/:
+    post:
+      operationId: auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /ru/api/v1/auth/token/verify/:
+    post:
+      operationId: auth_token_verify_create
+      description: |-
+        Takes a token and indicates if it is valid.  This view provides no
+        information about a token's fitness for a particular use.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenVerify'
+          description: ''
+  /ru/api/v1/explat/banks/:
+    get:
+      operationId: explat_banks_list
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bank'
+          description: ''
+  /ru/api/v1/explat/banks/{id}/:
+    get:
+      operationId: explat_banks_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 'A unique integer value identifying this Реквизиты: Банк.'
+        required: true
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bank'
+          description: ''
+  /ru/api/v1/explat/device-sms-messages/:
+    get:
+      operationId: explat_device_sms_messages_list
+      description: |-
+        СМС-сообщения устройства.
+        Разрешены только: создание (POST), чтение списка (GET) и одного сообщения (GET).
+        Изменение/удаление отключены.
+      parameters:
+      - in: query
+        name: device__uid
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: from_number
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: parse_status
+        schema:
+          type: string
+          enum:
+          - partial
+          - recognized
+          - unknown
+          - unrecognized
+        description: |-
+          Степень распознавания содержимого
+
+          * `recognized` - Распознано
+          * `unrecognized` - Нераспознано
+          * `partial` - Распознано частично
+          * `unknown` - Неизвестно
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeviceSMSMessageList'
+          description: ''
+  /ru/api/v1/explat/device-sms-messages/{uid}/:
+    get:
+      operationId: explat_device_sms_messages_retrieve
+      description: |-
+        СМС-сообщения устройства.
+        Разрешены только: создание (POST), чтение списка (GET) и одного сообщения (GET).
+        Изменение/удаление отключены.
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceSMSMessage'
+          description: ''
+  /ru/api/v1/explat/devices/:
+    get:
+      operationId: explat_devices_list
+      parameters:
+      - in: query
+        name: carrier
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - active
+          - inactive
+        description: |-
+          Статус устройства
+
+          * `active` - Активный
+          * `inactive` - Неактивный
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeviceList'
+          description: ''
+    post:
+      operationId: explat_devices_create
+      tags:
+      - explat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeviceCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeviceCreate'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceCreate'
+          description: ''
+  /ru/api/v1/explat/devices/{uid}/:
+    get:
+      operationId: explat_devices_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: ''
+    put:
+      operationId: explat_devices_update
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Device'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Device'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: ''
+    patch:
+      operationId: explat_devices_partial_update
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDevice'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDevice'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDevice'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: ''
+    delete:
+      operationId: explat_devices_destroy
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /ru/api/v1/explat/devices/{uid}/healthcheck/:
+    post:
+      operationId: explat_devices_healthcheck_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceHealthcheck'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeviceHealthcheck'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeviceHealthcheck'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceHealthcheck'
+          description: ''
+  /ru/api/v1/explat/devices/{uid}/sms-message/:
+    post:
+      operationId: explat_devices_sms_message_create
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceSMSMessage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeviceSMSMessage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeviceSMSMessage'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceSMSMessage'
+          description: ''
+  /ru/api/v1/explat/payment-instruments/:
+    get:
+      operationId: explat_payment_instruments_list
+      description: |-
+        Пользователь работает только со своими реквизитами (через связанные устройства).
+        Полный доступ на чтение/изменение всех полей, кроме min_amount (оно read-only в сериализаторе). и device(оно заполняется при создании).
+      parameters:
+      - in: query
+        name: bank
+        schema:
+          type: integer
+      - in: query
+        name: device__uid
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: payment_method
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - activated
+          - deactivated
+          - testing
+        description: |-
+          Статус реквизита
+
+          * `activated` - Активированный
+          * `deactivated` - Деактивированный
+          * `testing` - Тестирование
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPaymentInstrumentList'
+          description: ''
+    post:
+      operationId: explat_payment_instruments_create
+      description: |-
+        Пользователь работает только со своими реквизитами (через связанные устройства).
+        Полный доступ на чтение/изменение всех полей, кроме min_amount (оно read-only в сериализаторе). и device(оно заполняется при создании).
+      tags:
+      - explat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInstrument'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PaymentInstrument'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PaymentInstrument'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInstrument'
+          description: ''
+  /ru/api/v1/explat/payment-instruments/{uid}/:
+    get:
+      operationId: explat_payment_instruments_retrieve
+      description: |-
+        Пользователь работает только со своими реквизитами (через связанные устройства).
+        Полный доступ на чтение/изменение всех полей, кроме min_amount (оно read-only в сериализаторе). и device(оно заполняется при создании).
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInstrument'
+          description: ''
+    put:
+      operationId: explat_payment_instruments_update
+      description: |-
+        Пользователь работает только со своими реквизитами (через связанные устройства).
+        Полный доступ на чтение/изменение всех полей, кроме min_amount (оно read-only в сериализаторе). и device(оно заполняется при создании).
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInstrument'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PaymentInstrument'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PaymentInstrument'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInstrument'
+          description: ''
+    patch:
+      operationId: explat_payment_instruments_partial_update
+      description: |-
+        Пользователь работает только со своими реквизитами (через связанные устройства).
+        Полный доступ на чтение/изменение всех полей, кроме min_amount (оно read-only в сериализаторе). и device(оно заполняется при создании).
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPaymentInstrument'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPaymentInstrument'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPaymentInstrument'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInstrument'
+          description: ''
+    delete:
+      operationId: explat_payment_instruments_destroy
+      description: |-
+        Пользователь работает только со своими реквизитами (через связанные устройства).
+        Полный доступ на чтение/изменение всех полей, кроме min_amount (оно read-only в сериализаторе). и device(оно заполняется при создании).
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /ru/api/v1/explat/payment-instruments/{uid}/activate/:
+    post:
+      operationId: explat_payment_instruments_activate_create
+      description: |-
+        POST /instruments/{id}/activate/
+        Доступно только текущему трейдеру: создает сделку для активации.
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - explat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInstrument'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PaymentInstrument'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PaymentInstrument'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInstrument'
+          description: ''
+  /ru/api/v1/explat/payment-methods/:
+    get:
+      operationId: explat_payment_methods_list
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentMethod'
+          description: ''
+  /ru/api/v1/explat/payment-methods/{id}/:
+    get:
+      operationId: explat_payment_methods_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 'A unique integer value identifying this Реквизиты: Метод оплаты.'
+        required: true
+      tags:
+      - explat
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+          description: ''
+  /ru/api/v1/users/current/:
+    get:
+      operationId: users_current_retrieve
+      description: Возвращает данные текущего аутентифицированного пользователя.
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    Bank:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - id
+      - name
+    Device:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          description: Имя устройства
+          maxLength: 255
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusA5cEnum'
+          description: |-
+            Статус устройства
+
+            * `active` - Активный
+            * `inactive` - Неактивный
+        user_id:
+          type: integer
+          readOnly: true
+        battery:
+          type: integer
+          readOnly: true
+          nullable: true
+          description: Заряд батареи в процентах (0–100)
+        model:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Модель устройства
+        phone_number:
+          type: string
+          nullable: true
+          description: Номер телефона
+          maxLength: 20
+        carrier:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Сотовый оператор
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          readOnly: true
+          nullable: true
+          description: Широта устройства
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          readOnly: true
+          nullable: true
+          description: Долгота устройства
+        is_available:
+          type: boolean
+          readOnly: true
+        healthcheck_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          description: Время проверки состояния устройства
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Дата и время создания
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Дата и время последнего обновления
+      required:
+      - battery
+      - carrier
+      - created_at
+      - healthcheck_at
+      - id
+      - is_available
+      - latitude
+      - longitude
+      - model
+      - uid
+      - updated_at
+      - user_id
+    DeviceCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          description: Имя устройства
+          maxLength: 255
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusA5cEnum'
+          description: |-
+            Статус устройства
+
+            * `active` - Активный
+            * `inactive` - Неактивный
+        user_id:
+          type: integer
+          readOnly: true
+        battery:
+          type: integer
+          readOnly: true
+          nullable: true
+          description: Заряд батареи в процентах (0–100)
+        model:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Модель устройства
+        phone_number:
+          type: string
+          nullable: true
+          description: Номер телефона
+          maxLength: 20
+        carrier:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Сотовый оператор
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          readOnly: true
+          nullable: true
+          description: Широта устройства
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          readOnly: true
+          nullable: true
+          description: Долгота устройства
+        is_available:
+          type: boolean
+          readOnly: true
+        healthcheck_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          description: Время проверки состояния устройства
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Дата и время создания
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Дата и время последнего обновления
+        secret_key:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Секретный ключ
+      required:
+      - battery
+      - carrier
+      - created_at
+      - healthcheck_at
+      - id
+      - is_available
+      - latitude
+      - longitude
+      - model
+      - secret_key
+      - uid
+      - updated_at
+      - user_id
+    DeviceHealthcheck:
+      type: object
+      properties:
+        secret_key:
+          type: string
+          writeOnly: true
+        model:
+          type: string
+          nullable: true
+          description: Модель устройства
+          maxLength: 255
+        battery:
+          type: integer
+          maximum: 100
+          minimum: 0
+          nullable: true
+          description: Заряд батареи в процентах (0–100)
+        carrier:
+          type: string
+          nullable: true
+          description: Сотовый оператор
+          maxLength: 255
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: Широта устройства
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+          description: Долгота устройства
+      required:
+      - secret_key
+    DeviceSMSMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          format: uuid
+          readOnly: true
+        secret_key:
+          type: string
+          writeOnly: true
+        device:
+          allOf:
+          - $ref: '#/components/schemas/Device'
+          readOnly: true
+        from_number:
+          type: string
+          description: Номер отправителя.
+          maxLength: 16
+        body:
+          type: string
+          description: Текст сообщения
+        device_received_at:
+          type: string
+          format: date-time
+          description: Время получения сообщения на устройстве
+        recognized_amount:
+          type: integer
+          readOnly: true
+          nullable: true
+          title: Распознанная сумма
+          description: Сумма, если распознано сообщение
+        parse_status:
+          allOf:
+          - $ref: '#/components/schemas/ParseStatusEnum'
+          readOnly: true
+          description: |-
+            Степень распознавания содержимого
+
+            * `recognized` - Распознано
+            * `unrecognized` - Нераспознано
+            * `partial` - Распознано частично
+            * `unknown` - Неизвестно
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Дата и время создания
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Дата и время последнего обновления
+      required:
+      - body
+      - created_at
+      - device
+      - device_received_at
+      - from_number
+      - id
+      - parse_status
+      - recognized_amount
+      - secret_key
+      - uid
+      - updated_at
+    PaginatedDeviceList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Device'
+    PaginatedDeviceSMSMessageList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceSMSMessage'
+    PaginatedPaymentInstrumentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInstrument'
+    ParseStatusEnum:
+      enum:
+      - recognized
+      - unrecognized
+      - partial
+      - unknown
+      type: string
+      description: |-
+        * `recognized` - Распознано
+        * `unrecognized` - Нераспознано
+        * `partial` - Распознано частично
+        * `unknown` - Неизвестно
+    PatchedDevice:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          description: Имя устройства
+          maxLength: 255
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusA5cEnum'
+          description: |-
+            Статус устройства
+
+            * `active` - Активный
+            * `inactive` - Неактивный
+        user_id:
+          type: integer
+          readOnly: true
+        battery:
+          type: integer
+          readOnly: true
+          nullable: true
+          description: Заряд батареи в процентах (0–100)
+        model:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Модель устройства
+        phone_number:
+          type: string
+          nullable: true
+          description: Номер телефона
+          maxLength: 20
+        carrier:
+          type: string
+          readOnly: true
+          nullable: true
+          description: Сотовый оператор
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          readOnly: true
+          nullable: true
+          description: Широта устройства
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          readOnly: true
+          nullable: true
+          description: Долгота устройства
+        is_available:
+          type: boolean
+          readOnly: true
+        healthcheck_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          description: Время проверки состояния устройства
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Дата и время создания
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Дата и время последнего обновления
+    PatchedPaymentInstrument:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          format: uuid
+          readOnly: true
+        device:
+          allOf:
+          - $ref: '#/components/schemas/Device'
+          readOnly: true
+        device_id:
+          type: integer
+          writeOnly: true
+        bank:
+          allOf:
+          - $ref: '#/components/schemas/Bank'
+          readOnly: true
+        bank_id:
+          type: integer
+          writeOnly: true
+        payment_method:
+          allOf:
+          - $ref: '#/components/schemas/PaymentMethod'
+          readOnly: true
+        payment_method_id:
+          type: integer
+          writeOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PaymentInstrumentStatusEnum'
+          description: |-
+            Статус реквизита
+
+            * `activated` - Активированный
+            * `deactivated` - Деактивированный
+            * `testing` - Тестирование
+        min_amount:
+          type: integer
+          readOnly: true
+        max_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Максимальная сумма платежа (целое число, ≥ 0)
+        owner_full_name:
+          type: string
+          description: ФИО владельца реквизита
+          maxLength: 255
+        phone_number:
+          type: string
+          description: Номер телефона
+          pattern: ^\+?\d{7,20}$
+          maxLength: 20
+        card_number:
+          type: string
+          description: Номер банковской карты (только цифры)
+          pattern: ^\d+$
+          maxLength: 32
+        account_number:
+          type: string
+          description: Номер счёта (только цифры)
+          pattern: ^\d+$
+          maxLength: 34
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PaymentInstrument:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          format: uuid
+          readOnly: true
+        device:
+          allOf:
+          - $ref: '#/components/schemas/Device'
+          readOnly: true
+        device_id:
+          type: integer
+          writeOnly: true
+        bank:
+          allOf:
+          - $ref: '#/components/schemas/Bank'
+          readOnly: true
+        bank_id:
+          type: integer
+          writeOnly: true
+        payment_method:
+          allOf:
+          - $ref: '#/components/schemas/PaymentMethod'
+          readOnly: true
+        payment_method_id:
+          type: integer
+          writeOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PaymentInstrumentStatusEnum'
+          description: |-
+            Статус реквизита
+
+            * `activated` - Активированный
+            * `deactivated` - Деактивированный
+            * `testing` - Тестирование
+        min_amount:
+          type: integer
+          readOnly: true
+        max_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Максимальная сумма платежа (целое число, ≥ 0)
+        owner_full_name:
+          type: string
+          description: ФИО владельца реквизита
+          maxLength: 255
+        phone_number:
+          type: string
+          description: Номер телефона
+          pattern: ^\+?\d{7,20}$
+          maxLength: 20
+        card_number:
+          type: string
+          description: Номер банковской карты (только цифры)
+          pattern: ^\d+$
+          maxLength: 32
+        account_number:
+          type: string
+          description: Номер счёта (только цифры)
+          pattern: ^\d+$
+          maxLength: 34
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - account_number
+      - bank
+      - bank_id
+      - card_number
+      - created_at
+      - device
+      - device_id
+      - id
+      - max_amount
+      - min_amount
+      - owner_full_name
+      - payment_method
+      - payment_method_id
+      - phone_number
+      - uid
+      - updated_at
+    PaymentInstrumentStatusEnum:
+      enum:
+      - activated
+      - deactivated
+      - testing
+      type: string
+      description: |-
+        * `activated` - Активированный
+        * `deactivated` - Деактивированный
+        * `testing` - Тестирование
+    PaymentMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          description: 'например: ''card'', ''account'', ''wallet'' и т.п.'
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - code
+      - id
+      - name
+    RoleEnum:
+      enum:
+      - unknown
+      - superadmin
+      - admin
+      - trader
+      - merchant
+      type: string
+      description: |-
+        * `unknown` - Неизвестно
+        * `superadmin` - Superadmin
+        * `admin` - Admin
+        * `trader` - Trader
+        * `merchant` - Merchant
+    StatusA5cEnum:
+      enum:
+      - active
+      - inactive
+      type: string
+      description: |-
+        * `active` - Активный
+        * `inactive` - Неактивный
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    TokenVerify:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+      required:
+      - token
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Имя
+          maxLength: 150
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+          title: Последний вход
+        date_joined:
+          type: string
+          format: date-time
+          title: Дата регистрации
+      required:
+      - id
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

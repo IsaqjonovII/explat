@@ -5,7 +5,7 @@
   >
     <textarea
       v-model="modelValue"
-      class="w-full h-full peer border-none outline-none resize-none p-3 font-normal text-sm leading-4 text-dark caret-blue placeholder:text-gray-1 caret-blue-primary bg-white-1 transition-300"
+      class="w-full h-full peer border-none outline-none resize-none p-3 font-normal text-sm leading-4 text-dark caret-blue placeholder:text-gray-1 caret-blue-primary bg-gray-5 transition-300"
       v-bind="{ placeholder, max, min, id }"
       @blur="$emit('blur')"
       @input="handleInput"

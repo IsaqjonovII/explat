@@ -1,20 +1,29 @@
+import { TableProps } from "@/types/components/props";
+
 export type TClassName =
   | string
   | string[]
   | Record<string, boolean>
   | Record<string, boolean>[];
 
-export interface IMedia {
-  type: "image" | "video";
-  url: string;
-  thumbnail?: string;
+export interface PaginationData {
+  offset: number;
+  limit: number;
+  total: number;
+  next: string | null;
 }
 
 export interface IDefaultResponse<T = unknown> {
   count: number;
-  next: string;
-  previous: string;
+  next?: string;
+  previous?: string;
   results: T[];
+}
+
+export interface IMedia {
+  type: "image" | "video";
+  url: string;
+  thumbnail?: string;
 }
 
 export interface IUserProfile {
@@ -152,4 +161,73 @@ export type Image = {
   s100x100: string;
   s500x500: string;
   s1000x1000: string;
+};
+
+export type ErrorResponse = {
+  detail: string;
+};
+
+export type TableSettings = Omit<TableProps<string>, "data">;
+
+// TODO: CHANGE WHILE INTERACTING WITH API
+export type Pagination = {
+  limit: number;
+  offset: number;
+  search: string;
+};
+
+export type RequestHeaders = {
+  Authorization: string;
+  "Accept-Language": string;
+};
+
+export type Status = "DRAFT" | "IN_PROGRESS" | "FAILED" | "SUCCESS";
+
+export type CommonFile = {
+  file: string;
+  id: string;
+  size: number;
+  type: "image" | "video" | "audio" | "document" | "other";
+  video_preview: string;
+  file_type_display: string;
+  size_display: string;
+  file_name: string;
+};
+
+export type FileForm = {
+  file: File;
+  type: CommonFile["type"];
+};
+
+export type Language = {
+  id: number;
+  title: string;
+  code: string;
+  icon: string;
+};
+
+export type UserData = {
+  id: number;
+  full_name: string;
+  avatar: string;
+  phone_number: string;
+};
+
+// Mapped types
+export type RequireOnly<T, K extends keyof T> = Partial<T> &
+  Required<Pick<T, K>>;
+
+export type Roles = {
+  id: number;
+  name: string;
+  codename: string;
+  created_at: string;
+  permissions: Permission[];
+};
+
+export type Permission = {
+  id: number;
+  title: string;
+  codename: string;
+  created_at: string;
 };

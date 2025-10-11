@@ -8,13 +8,14 @@
           title: $t('add_requisite'),
         }"
         @add="addRequisite"
-        :loading="loading"
+        :loading="isLoading"
         :title="$t('requisites.title')"
-        :subtitle="$t('requisites.count', { count: paginationData.total })"
-        :total="paginationData.total"
+        :subtitle="$t('requisites.count', { count: pagination.total })"
+        :total="pagination.total"
         :filter="{ status }"
         v-bind="tableSettings()"
         @click-to-row="openTransaction"
+        @page-change="onPageChange"
       >
         <template #id="{ data }">
           <div class="flex items-center gap-1">
@@ -36,23 +37,23 @@
         </template>
 
         <template #bank_method="{ data }">
-          <span>{{ data?.bank }}</span>
+          <span>{{ data?.bank?.name }}</span>
         </template>
 
         <template #requisites="{ data }">
           <CReqisites
-            :number="data?.requisite?.number"
-            :name="data?.requisite?.name"
-            :bank="data?.requisite?.bank"
-            :payment_method="data?.requisite?.payment_method"
+            :number="data?.card_number"
+            :name="data?.owner_full_name"
+            :bank="data?.bank?.name"
+            :payment_method="data?.payment_method?.name"
           />
         </template>
 
         <template #indicator="{ data }">
           <div class="w-full flex items-start">
             <CLimitIndicator
-              :limit="data?.limit?.limit"
-              :current="data?.limit?.current"
+              :limit="data?.max_amount"
+              :current="data?.min_amount"
             />
           </div>
         </template>
@@ -112,116 +113,35 @@ import {
 } from "@/modules/requisites/data/PRequisites";
 import { CAmount, CReqisites, CLimitIndicator } from "@/components/Common";
 import { useI18n } from "vue-i18n";
+import { useTableFetch } from "@/composables/useTableFetch";
+import type { IRequisite } from "@/modules/requisites/api/requisitesApi";
+import { onMounted, onUnmounted } from "vue";
 
 const { t } = useI18n();
 
 const status = useRouteQuery("status", t("conditions.all"));
 
-const loading = ref(false);
+// Prepare initial parameters for API filtering
+const getInitialParams = () => {
+  const params: Record<string, string> = {};
+  if (status.value && status.value !== t("conditions.all")) {
+    params["status"] = status.value;
+  }
+  return params;
+};
+
+// Use the table fetch composable for real API data
+const { tableData, pagination, isLoading, onPageChange, refetch } =
+  useTableFetch<IRequisite>(
+    "/explat/payment-instruments/",
+    getInitialParams(),
+    ["status"]
+  );
+
 const addRequisiteModal = ref(false);
 const addRequisite = () => {
   addRequisiteModal.value = true;
 };
-
-const tableData = ref([
-  {
-    id: 37351,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    bank: "Сбербанк",
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "test",
-    limit: {
-      current: 678000,
-      limit: 1000000,
-    },
-  },
-  {
-    id: 37351,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    bank: "Сбербанк",
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "deactivate",
-    limit: {
-      current: 678000,
-      limit: 1000000,
-    },
-  },
-  {
-    id: 37351,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    bank: "Сбербанк",
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "activate",
-    limit: {
-      current: 678000,
-      limit: 1000000,
-    },
-  },
-]);
-
-const paginationData = ref({
-  total: tableData.value.length,
-});
 
 const transactionModal = ref(false);
 const transactionModalItem = ref({});
@@ -230,6 +150,19 @@ function openTransaction(d: unknown) {
   transactionModal.value = true;
   transactionModalItem.value = d;
 }
+
+// Listen for refresh events from the form
+const handleRequisiteCreated = () => {
+  refetch();
+};
+
+onMounted(() => {
+  window.addEventListener("requisite-created", handleRequisiteCreated);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("requisite-created", handleRequisiteCreated);
+});
 </script>
 
 <style scoped>

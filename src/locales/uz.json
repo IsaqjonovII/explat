@@ -1,3 +1,36 @@
 {
-  "__comment": "Bu izoh"
+  "__comment": "Bu izoh",
+  "devices": {
+    "title": "Qurilmalar",
+    "count": "Jami qurilmalar: {count}",
+    "name": "Nomi",
+    "number": "Telefon raqami",
+    "phone_number": "Telefon raqami",
+    "battery": "Batareya",
+    "network": "Tarmoq",
+    "carrier": "Operator",
+    "model": "Model",
+    "availability": "Mavjudlik",
+    "available": "Mavjud",
+    "unavailable": "Mavjud emas",
+    "add": "Qurilma qo'shish",
+    "search_placeholder": "Nomi, modeli, raqami bo'yicha qidirish...",
+    "status": {
+      "active": "Faol",
+      "inactive": "Nofaol"
+    },
+    "ordering": {
+      "id_asc": "ID (o'sish bo'yicha)",
+      "id_desc": "ID (kamayish bo'yicha)",
+      "name_asc": "Nomi (A-Z)",
+      "name_desc": "Nomi (Z-A)",
+      "battery_asc": "Batareya (o'sish bo'yicha)",
+      "battery_desc": "Batareya (kamayish bo'yicha)",
+      "created_asc": "Yaratilgan (eski)",
+      "created_desc": "Yaratilgan (yangi)"
+    }
+  },
+  "statuses": {
+    "all_statuses": "Barcha holatlar"
+  }
 }

@@ -50,7 +50,7 @@
               v-if="!menuItem?.sub?.length"
               :class="{
                 '!bg-primary/10': createRoutePattern(
-                  menuItem.route.toString(),
+                  menuItem.route.toString()
                 ).test(location),
               }"
               :to="menuItem?.route"
@@ -62,7 +62,7 @@
                   menuItem?.svgIcon,
                   {
                     '!text-primary': createRoutePattern(
-                      menuItem.route.toString(),
+                      menuItem.route.toString()
                     ).test(location),
                   },
                 ]"
@@ -73,7 +73,7 @@
                   v-if="isOpen || hovered"
                   :class="{
                     'font-semibold': createRoutePattern(menuItem.route).test(
-                      location,
+                      location
                     ),
                   }"
                   class="text-sm text-white font-normal whitespace-nowrap"
@@ -245,7 +245,7 @@ watch(location, () => {
 function isActiveSub(arr?: IMenu[]) {
   return arr?.some((el) => {
     const routePattern = new RegExp(
-      `^${el.route.toString()?.replace(/:\w+/g, "\\w+")}`,
+      `^${el.route.toString()?.replace(/:\w+/g, "\\w+")}`
     );
     return (
       routePattern.test(location.value) ||

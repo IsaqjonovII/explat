@@ -23,7 +23,7 @@
             :disabled="props.disabled"
             :required="props.required"
             :value="v"
-            class="w-full text-center bg-white-1 outline-none transition-300 size-14 font-medium text-2xl text-dark leading-140 overflow-hidden !rounded-md border caret-blue border-[#94A8AA66] focus:border-blue focus:bg-white"
+            class="w-full text-center bg-gray-5 outline-none transition-300 size-14 font-medium text-2xl text-dark leading-140 overflow-hidden !rounded-md border caret-blue border-[#94A8AA66] focus:border-blue focus:bg-white"
             maxlength="1"
             pattern="[0-9]"
             @blur="activeIndex = null"

@@ -4,17 +4,17 @@
       {{ $t("form.pagination.show") }}
     </p>
     <FormSelect
-        v-model="value"
-        :disabled="disabled"
-        direction="bottom"
-        selected-option-styles="!px-3 !py-1 bg-white-1 border-none"
-        v-bind="{ options }"
+      v-model="value"
+      :disabled="disabled"
+      direction="bottom"
+      selected-option-styles="!px-3 !py-1 bg-gray-5 border-none"
+      v-bind="{ options }"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import {FormSelect} from "@/components/Base";
+import { FormSelect } from "@/components/Base";
 
 interface Props {
   disabled?: boolean;

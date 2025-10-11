@@ -5,7 +5,7 @@
     </p>
 
     <button
-      class="icon-copy active:scale-95 bg-gray-4 p-0.5 rounded text-gray-1 hover:bg-white-1 transition-colors duration-200"
+      class="icon-copy active:scale-95 bg-gray-4 p-0.5 rounded text-gray-1 hover:bg-gray-5 transition-colors duration-200"
       @click="copyToClipboard"
     />
 
@@ -35,7 +35,6 @@ const { t } = useI18n();
 
 const isCopied = ref(false);
 
-// eslint-disable-next-line no-undef
 const timeoutId = ref<number | null>(null);
 
 const copyToClipboard = () => {

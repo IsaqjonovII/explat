@@ -17,17 +17,17 @@
           label-key="label"
           value-key="value"
           :placeholder="$t('banks.choose_bank')"
-          v-model="form.values.bank"
+          v-model="form.values.bank_id"
           :options="banks"
-          :error="form.$v.value.bank.$error"
-          @on-select="form.values.bank = $event"
+          :error="form.$v.value.bank_id.$error"
+          @on-select="form.values.bank_id = $event"
         />
       </FormGroup>
       <FormGroup :label="$t('add_requisite_modal.name')">
         <FormInput
-          v-model="form.values.name"
+          v-model="form.values.owner_full_name"
           :placeholder="$t('add_requisite_modal.placeholder_name')"
-          :error="form.$v.value.name.$error"
+          :error="form.$v.value.owner_full_name.$error"
         />
       </FormGroup>
       <FormGroup :label="$t('add_requisite_modal.card_number')">
@@ -54,43 +54,25 @@
           :error="form.$v.value.account_number.$error"
         />
       </FormGroup>
-      <FormGroup :label="$t('add_requisite_modal.min_check')">
-        <FormInput
-          type="number"
-          v-model="form.values.min_check"
-          :placeholder="$t('add_requisite_modal.placeholder_min_check')"
-          :error="form.$v.value.min_check.$error"
-        >
-          <template #suffix> ₽ </template>
-        </FormInput>
-      </FormGroup>
       <FormGroup :label="$t('add_requisite_modal.max_check')">
         <FormInput
           type="number"
-          v-model="form.values.max_check"
+          v-model="form.values.max_amount"
           :placeholder="$t('add_requisite_modal.placeholder_max_check')"
-          :error="form.$v.value.max_check.$error"
+          :error="form.$v.value.max_amount.$error"
         >
           <template #suffix> ₽ </template>
         </FormInput>
       </FormGroup>
-      <FormGroup :label="$t('add_requisite_modal.orders_count')">
-        <FormInput
-          type="number"
-          v-model="form.values.orders_count"
-          :placeholder="$t('add_requisite_modal.placeholder_orders_count')"
-          :error="form.$v.value.orders_count.$error"
-        />
-      </FormGroup>
       <FormGroup :label="$t('add_requisite_modal.payment_method')">
         <FormSelect
-          v-model="form.values.payment_method"
-          :error="form.$v.value.payment_method.$error"
+          v-model="form.values.payment_method_id"
+          :error="form.$v.value.payment_method_id.$error"
           label-key="label"
           value-key="value"
           :placeholder="$t('add_requisite_modal.placeholder_payment_method')"
           :options="payment_method"
-          @on-select="form.values.payment_method = $event"
+          @on-select="form.values.payment_method_id = $event"
         />
       </FormGroup>
     </div>
@@ -103,6 +85,7 @@
       <BaseButton
         @click="add_requisites"
         :text="$t('add_requisite')"
+        :loading="isLoading"
         class="flex-1"
       />
     </div>
@@ -119,67 +102,106 @@ import {
 } from "@/components/Base";
 import { useForm } from "@/composables/useForm";
 import { required } from "@vuelidate/validators";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import {
+  requisitesApi,
+  type IBank,
+  type IPaymentMethod,
+} from "../api/requisitesApi";
+import { useCustomToast } from "@/composables/useCustomToast";
 
 const modelValue = defineModel<boolean>();
+const { showToast } = useCustomToast();
 
 const form = useForm(
   {
     device_id: "",
-    bank: "",
-    name: "",
+    bank_id: "",
+    owner_full_name: "",
     card_number: "",
     phone_number: "",
     account_number: "",
-    min_check: "",
-    max_check: "",
-    orders_count: "",
-    payment_method: "",
+    max_amount: "",
+    payment_method_id: "",
   },
   {
     device_id: { required },
-    bank: { required },
-    name: { required },
+    bank_id: { required },
+    owner_full_name: { required },
     card_number: { required },
     phone_number: { required },
     account_number: { required },
-    min_check: { required },
-    max_check: { required },
-    orders_count: { required },
-    payment_method: { required },
-  },
+    max_amount: { required },
+    payment_method_id: { required },
+  }
 );
 
-const add_requisites = () => {
-  form.$v.value.$touch();
-};
+const banks = ref<{ label: string; value: string }[]>([]);
+const payment_method = ref<{ label: string; value: string }[]>([]);
+const isLoading = ref(false);
 
-const banks = ref([
-  {
-    label: "Сбербанк",
-    value: "sber",
-  },
-  {
-    label: "Тинкофф",
-    value: "tinkoff",
-  },
-  {
-    label: "Альфабанк",
-    value: "alfa",
-  },
-]);
-const payment_method = ref([
-  {
-    label: "TPay",
-    value: "tpay",
-  },
-  {
-    label: "PayPal",
-    value: "paypal",
-  },
-  {
-    label: "YandexMoney",
-    value: "yandex",
-  },
-]);
+// Load banks and payment methods from API
+onMounted(async () => {
+  try {
+    isLoading.value = true;
+
+    // Load banks
+    const banksData = await requisitesApi.getBanks();
+    banks.value = banksData.map((bank) => ({
+      label: bank.name,
+      value: bank.id.toString(),
+    }));
+
+    // Load payment methods
+    const paymentMethodsData = await requisitesApi.getPaymentMethods();
+    payment_method.value = paymentMethodsData.map((method) => ({
+      label: method.name,
+      value: method.id.toString(),
+    }));
+  } catch (error) {
+    console.error("Error loading form data:", error);
+    showToast("error", "Failed to load form data");
+  } finally {
+    isLoading.value = false;
+  }
+});
+
+const add_requisites = async () => {
+  form.$v.value.$touch();
+
+  if (form.$v.value.$invalid) {
+    return;
+  }
+
+  try {
+    isLoading.value = true;
+
+    const requisiteData = {
+      device_id: parseInt(form.values.device_id),
+      bank_id: parseInt(form.values.bank_id),
+      payment_method_id: parseInt(form.values.payment_method_id),
+      owner_full_name: form.values.owner_full_name,
+      card_number: form.values.card_number,
+      phone_number: form.values.phone_number,
+      account_number: form.values.account_number,
+      max_amount: parseInt(form.values.max_amount),
+    };
+
+    await requisitesApi.createRequisite(requisiteData);
+
+    showToast("success", "Requisite created successfully");
+    modelValue.value = false;
+
+    // Reset form
+    form.$reset();
+
+    // Emit event to refresh the list
+    window.dispatchEvent(new CustomEvent("requisite-created"));
+  } catch (error) {
+    console.error("Error creating requisite:", error);
+    showToast("error", "Failed to create requisite");
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>

@@ -1,6 +1,9 @@
 <template>
-  <div class="flex-center flex-col py-12">
-    <img :src="image" alt="no-data-image" class="mx-auto min-h-[125px]" />
+  <div class="flex-center flex-col py-12 min-w-full">
+    <span class="flex-center size-[104px] bg-brand/20 rounded-full">
+      <i :class="icon ?? 'icon-files'" class="text-6xl text-brand" />
+    </span>
+
     <p
       v-if="title"
       :class="titleClass"
@@ -15,23 +18,44 @@
     >
       {{ subtitle }}
     </p>
+
     <div class="mt-5">
-      <slot name="actions" />
+      <slot v-if="hasActions" name="actions">
+        <BaseButton
+          v-if="!addLink"
+          icon="icon-plus"
+          :text="text"
+          variant="info"
+          @click="$emit('addLink')"
+        />
+
+        <RouterLink v-else :to="addLink">
+          <BaseButton icon="icon-plus" :text="text" variant="info" />
+        </RouterLink>
+      </slot>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { BaseButton } from "@/components/Base";
+
 interface Props {
-  image: string;
   subtitle?: string;
   subtitleClass?: string;
   title: string;
+  icon?: string;
   titleClass?: string;
+  addLink?: string;
+  hasActions?: boolean;
+  text?: string;
 }
 
 withDefaults(defineProps<Props>(), {
-  image: "/images/no-data.svg",
   title: "",
+  hasActions: true,
+  text: "button.add",
 });
+
+defineEmits(["add", "addLink"]);
 </script>

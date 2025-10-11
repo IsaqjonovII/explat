@@ -46,13 +46,11 @@
       "max_size_photo": "Формат: pdf, png, jpeg, jpg"
     }
   },
-  "common": {
-  },
+  "common": {},
   "button": {
     "clear_filter": "Очистить фильтр"
   },
-  "toast": {
-  },
+  "toast": {},
   "roles": {
     "superadmin": "Суперадминистратор",
     "admin": "Администратор",
@@ -75,7 +73,7 @@
   "dd_mm_yyyy": "дд/мм/гггг",
   "orders": {
     "title": "Ордера",
-    "count":  "Общее количество ордеров: {count}",
+    "count": "Общее количество ордеров: {count}",
     "amount": "Сумма",
     "device": "Устройство/id",
     "payment_method": "Способ оплаты",
@@ -99,7 +97,7 @@
   "search": "Поиск",
   "appeals": {
     "title": "Апелляции",
-    "count":  "Общее количество апелляций: {count}",
+    "count": "Общее количество апелляций: {count}",
     "amount": "Сумма",
     "device": "Устройство/id",
     "payment_method": "Реквизиты",
@@ -121,7 +119,7 @@
   },
   "requisites": {
     "title": "Реквизиты",
-    "count":  "Общее количество реквизитов: {count}",
+    "count": "Общее количество реквизитов: {count}",
     "requisites": "Реквизиты",
     "balance": "Баланс",
     "bank_method": "Банк/Метод",
@@ -138,24 +136,24 @@
   "add_requisite_modal": {
     "placeholder_device_id": "Введите ID Девайса",
     "device_id": "ID Девайса:",
-    "placeholder_bank":"Выберите Банк",
-    "bank":"Банк:",
+    "placeholder_bank": "Выберите Банк",
+    "bank": "Банк:",
     "placeholder_name": "Введите имя",
     "name": "ФИО:",
-    "placeholder_card_number":"Введите номер карты",
-    "card_number":"Номер карты:",
+    "placeholder_card_number": "Введите номер карты",
+    "card_number": "Номер карты:",
     "placeholder_phone_number": "Введите номер телефона",
     "phone_number": "Номер телефона:",
-    "placeholder_account_number":"Введите номер счета",
-    "account_number":"Номер счета:",
+    "placeholder_account_number": "Введите номер счета",
+    "account_number": "Номер счета:",
     "placeholder_min_check": "Укажите минимальный чек",
     "min_check": "Минимальный чек:",
-    "placeholder_max_check":"Укажите максимальный чек",
-    "max_check":"Максимальный чек:",
+    "placeholder_max_check": "Укажите максимальный чек",
+    "max_check": "Максимальный чек:",
     "placeholder_orders_count": "Количество ордеров",
     "orders_count": "Кол-во ордеров в моменте:",
     "placeholder_payment_method": "Выберите метод оплаты",
-    "payment_method":"Метод:"
+    "payment_method": "Метод:"
   },
   "banks": {
     "all": "Все банки",
@@ -175,18 +173,44 @@
   },
   "devices": {
     "title": "Устройства",
-    "count":  "Общее количество устройств: {count}",
+    "count": "Общее количество устройств: {count}",
+    "name": "Название",
     "number": "Номер телефона",
+    "phone_number": "Номер телефона",
     "battery": "Батарея",
     "network": "Связь",
+    "carrier": "Оператор",
     "model": "Модель",
-    "add": "Добавить устройство"
+    "status": "Статус",
+    "availability": "Доступность",
+    "available": "Доступно",
+    "unavailable": "Недоступно",
+    "add": "Добавить устройство",
+    "search_placeholder": "Поиск по названию, модели, номеру...",
+    "status": {
+      "active": "Активно",
+      "inactive": "Неактивно"
+    },
+    "ordering": {
+      "id_asc": "ID (по возрастанию)",
+      "id_desc": "ID (по убыванию)",
+      "name_asc": "Название (А-Я)",
+      "name_desc": "Название (Я-А)",
+      "battery_asc": "Батарея (по возрастанию)",
+      "battery_desc": "Батарея (по убыванию)",
+      "created_asc": "Дата создания (старые)",
+      "created_desc": "Дата создания (новые)"
+    }
   },
   "copy": "Скопировать токен",
   "notification": {
     "title": "Уведомления",
-    "count":  "Общее количество уведомлений: {count}",
+    "count": "Общее количество уведомлений: {count}",
     "date": "Дата и время",
     "body": "СМС"
+  },
+  "no_data": {
+    "title": "Нет данных",
+    "subtitle": "Нет данных для отображения"
   }
 }

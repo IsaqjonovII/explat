@@ -1,3 +1,135 @@
 {
-  "__comment": "This is a comment"
+  "__comment": "This is a comment",
+  "welcome": "Welcome",
+  "devices": {
+    "title": "Devices",
+    "count": "Total devices: {count}",
+    "name": "Name",
+    "number": "Phone Number",
+    "phone_number": "Phone Number",
+    "battery": "Battery",
+    "network": "Network",
+    "carrier": "Carrier",
+    "model": "Model",
+    "status": "Status",
+    "availability": "Availability",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "add": "Add Device",
+    "search_placeholder": "Search by name, model, number...",
+    "details": "Device Details",
+    "uid": "Device UID",
+    "user_id": "User ID",
+    "basic_info": "Basic Information",
+    "status_performance": "Status & Performance",
+    "location": "Location",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "timestamps": "Timestamps",
+    "created_at": "Created At",
+    "updated_at": "Updated At",
+    "last_healthcheck": "Last Health Check",
+    "refresh": "Refresh",
+    "error_loading_details": "Error loading device details",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "maintenance": "Maintenance",
+      "offline": "Offline"
+    },
+    "ordering": {
+      "id_asc": "ID (Ascending)",
+      "id_desc": "ID (Descending)",
+      "name_asc": "Name (A-Z)",
+      "name_desc": "Name (Z-A)",
+      "battery_asc": "Battery (Ascending)",
+      "battery_desc": "Battery (Descending)",
+      "created_asc": "Created (Oldest)",
+      "created_desc": "Created (Newest)"
+    }
+  },
+  "requisites": {
+    "title": "Requisites",
+    "count": "Total requisites: {count}",
+    "bank": "Bank",
+    "payment_method": "Payment Method",
+    "card_number": "Card Number",
+    "owner_name": "Owner Name",
+    "phone_number": "Phone Number",
+    "account_number": "Account Number",
+    "min_amount": "Min Amount",
+    "max_amount": "Max Amount",
+    "status": "Status",
+    "add_requisite": "Add Requisite",
+    "search_placeholder": "Search by bank, card number, owner...",
+    "details": "Requisite Details",
+    "uid": "Requisite UID",
+    "device": "Device",
+    "bank_info": "Bank Information",
+    "payment_info": "Payment Information",
+    "amount_limits": "Amount Limits",
+    "contact_info": "Contact Information",
+    "timestamps": "Timestamps",
+    "created_at": "Created At",
+    "updated_at": "Updated At",
+    "status": {
+      "activated": "Activated",
+      "deactivated": "Deactivated",
+      "testing": "Testing"
+    },
+    "ordering": {
+      "id_asc": "ID (Ascending)",
+      "id_desc": "ID (Descending)",
+      "bank_asc": "Bank (A-Z)",
+      "bank_desc": "Bank (Z-A)",
+      "created_asc": "Created (Oldest)",
+      "created_desc": "Created (Newest)"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "count": "Total notifications: {count}",
+    "message": "Message",
+    "date": "Date",
+    "status": "Status",
+    "search_placeholder": "Search by message content...",
+    "details": "Notification Details",
+    "uid": "Notification UID",
+    "device": "Device",
+    "from_number": "From Number",
+    "body": "Message Body",
+    "device_received_at": "Received At",
+    "recognized_amount": "Recognized Amount",
+    "parse_status": "Parse Status",
+    "timestamps": "Timestamps",
+    "created_at": "Created At",
+    "updated_at": "Updated At",
+    "status": {
+      "recognized": "Recognized",
+      "unrecognized": "Unrecognized",
+      "partial": "Partial",
+      "unknown": "Unknown"
+    },
+    "ordering": {
+      "id_asc": "ID (Ascending)",
+      "id_desc": "ID (Descending)",
+      "created_asc": "Created (Oldest)",
+      "created_desc": "Created (Newest)"
+    }
+  },
+  "statuses": {
+    "all_statuses": "All Statuses"
+  },
+  "common": {
+    "copied": "Copied to clipboard",
+    "copy_failed": "Failed to copy"
+  },
+  "button": {
+    "close": "Close",
+    "add": "Add"
+  },
+  "no_data": {
+    "title": "No data available",
+    "subtitle": "There is no data to display at the moment"
+  }
 }

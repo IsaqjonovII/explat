@@ -1,1 +1,1 @@
-export const nonClearableKeys = ['search', 'limit']
+export const nonClearableKeys = ["search", "limit", "page", "tab"];

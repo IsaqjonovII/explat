@@ -1,121 +1,131 @@
-import { onBeforeMount, reactive, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { computed, onBeforeMount, reactive, watch, watchEffect } from "vue";
+import { useQuery } from "@tanstack/vue-query";
+import { useRoute, useRouter } from "vue-router";
+import { useRouteQuery } from "@vueuse/router";
+import { apiService } from "@/services";
 
-import { useApi } from "@/composables/useApi";
-import { useCustomToast } from "@/composables/useCustomToast";
-import { usePagination } from "@/composables/usePagination";
-import { IDefaultResponse, Pagination } from "@/types/common";
-import { updateQueryParams } from "@/utils";
-import { debounce } from "@/utils/functions/common";
+type TableDataResponse<T> = {
+  results: T[];
+  total: number;
+  count: number;
+};
 
-export function useTableFetch<TD = unknown>(
+const INITIAL_LIMIT = 10;
+const INITIAL_PAGE = 1;
+
+export const useTableFetch = <T>(
   url: string,
-  params: Pagination = { page: 1, limit: 10 },
-  itself?: boolean
-) {
-  const { showToast } = useCustomToast();
-  const { t: $t } = useI18n();
+  initialParams = {},
+  ignoredParams: string[] = ["tab"],
+  noResults = false,
+  defaultPageSize = INITIAL_LIMIT
+) => {
   const route = useRoute();
+  const router = useRouter();
+  const search = useRouteQuery<string>("search", "");
 
-  const defaultParams = {
-    page: route.query.page ? +route.query.page : 1,
-    limit: route.query.limit ? +route.query.limit : 10,
-    search: route.query.search,
-  };
+  const userLimit = (initialParams as any).limit ?? 10;
 
-  const paginationData = reactive({
+  const pagination = reactive({
     total: 0,
-    defaultLimit: params?.limit || defaultParams.limit,
-    currentPage: defaultParams.page,
+    limit: useRouteQuery<number>("limit", userLimit, {
+      transform: Number,
+    }),
+    page: useRouteQuery<number>("page", INITIAL_PAGE, { transform: Number }),
+    offset: 0,
   });
 
-  const { offset, changePage } = usePagination(
-    ref(paginationData.defaultLimit),
-    ref(paginationData.currentPage)
-  );
+  const offset = computed(() => (pagination.page - 1) * pagination.limit);
 
-  const loading = ref(false);
-  const searchText = ref(route.query.search);
-  const tableData = ref<IDefaultResponse<TD> | TD[]>([]);
+  const params = computed(() => {
+    const allParams: { [key: string]: string | number } = {
+      ...initialParams,
+      limit: pagination.limit,
+      offset: offset.value,
+    };
+    Object.keys(route.query).forEach((key) => {
+      if (!ignoredParams.includes(key)) {
+        allParams[key] = route.query[key] as string | number;
+      }
+    });
+    return allParams;
+  });
 
-  const fetchTableData = () => {
-    loading.value = true;
-    useApi()
-      .$get<IDefaultResponse<TD>>(url, {
-        params: {
-          ...route.query,
-          ...params,
-          page: undefined,
-          search: searchText.value,
-          limit: paginationData.defaultLimit,
-          offset:
-            (paginationData.currentPage - 1) * paginationData.defaultLimit,
-        },
-      })
-      .then((res) => {
-        paginationData.total = res?.count;
-        tableData.value = itself ? res : res?.results;
-      })
-      .catch((err) => {
-        if (err?.response?.status === 500) {
-          showToast($t("server_error"), "error");
-        }
-        // handleError(err?.response?.data);
-      })
-      .finally(() => (loading.value = false));
+  const queryKey = computed(() => [
+    "tableData",
+    url,
+    {
+      ...params.value,
+      page: pagination.page,
+      limit: pagination.limit,
+    },
+  ]);
+
+  const fetchTableData = async (url: string, options: any) => {
+    return await apiService.$get<TableDataResponse<T>>(url, options);
+  };
+
+  const { data, error, refetch, isLoading } = useQuery({
+    queryKey,
+    queryFn: () => fetchTableData(url, { params: params.value }), // Ensure this is not re-created unnecessarily
+    enabled: !!url,
+  });
+
+  watch([isLoading, error, data], () => {
+    if (!isLoading.value && !error.value && data.value) {
+      pagination.total = data.value.count || 0;
+    }
+  });
+
+  // Ensure pagination.total is restored when the component is mounted or query data changes
+  watchEffect(() => {
+    if (data.value && data.value.count) {
+      pagination.total = data.value.count;
+    }
+  });
+
+  const onPageChange = (page: number) => {
+    if (page && page !== pagination.page) {
+      pagination.page = page;
+      router.push({ query: { ...route.query, page: page.toString() } });
+    }
+  };
+
+  watchEffect(() => {
+    const newQuery = route.query;
+    const newLimit = newQuery["limit"] ? Number(newQuery["limit"]) : userLimit;
+    const newPage = Number(newQuery["page"]) || INITIAL_PAGE;
+    const newSearch = newQuery["search"] || "";
+
+    if (newSearch !== search.value) {
+      pagination.limit = defaultPageSize;
+      pagination.page = INITIAL_PAGE;
+      search.value = Array.isArray(newSearch) ? newSearch[0] : newSearch;
+    } else {
+      pagination.limit = newLimit;
+      pagination.page = newPage;
+    }
+  });
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   onBeforeMount(() => {
-    const currentPage = Number(route.query.page);
-    if (currentPage && +currentPage !== paginationData.currentPage) {
-      onPageChange(+currentPage);
-    } else {
-      fetchTableData();
-    }
+    scrollToTop();
   });
 
-  async function onSearch(text: string) {
-    offset.value = 0;
-    await onPageChange(1);
-    searchText.value = text;
-    await updateQueryParams("search", text);
-    debounce("search-merchant-search", () => fetchTableData(), 500);
-  }
-
-  const onPageChange = async (page: number) => {
-    if (page && page !== paginationData.currentPage) {
-      await updateQueryParams("page", String(page));
-      paginationData.currentPage = page;
-      changePage(page);
-      fetchTableData();
-    }
-  };
-
-  const scrollToTop = () => {
-    const tableEl = document.querySelector(".i-table");
-    if (tableEl) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
-  const onChangeLimit = async (newLimit: number) => {
-    paginationData.defaultLimit = newLimit;
-    paginationData.currentPage = 1;
-    await onSearch(String(route.query.search || ""));
-    scrollToTop();
-    await updateQueryParams("limit", String(newLimit));
-  };
+  const tableData = computed(
+    () =>
+      (data.value ? (noResults ? data.value : data.value.results) : []) as T[]
+  );
 
   return {
-    offset,
-    loading,
     tableData,
-    defaultParams,
-    paginationData,
-    onSearch,
+    pagination,
+    isLoading,
+    error,
     onPageChange,
-    onChangeLimit,
-    fetchTableData,
+    refetch,
   };
-}
+};
