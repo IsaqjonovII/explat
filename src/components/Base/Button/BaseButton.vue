@@ -66,7 +66,7 @@ const emit = defineEmits<ButtonEmits>();
 const { t } = useI18n();
 
 const variants: Record<TButtonVariants, TClassName> = {
-  primary: "bg-blue-dark text-white hover:bg-blue ",
+  primary: "bg-blue text-white hover:bg-blue ",
   danger: "bg-red/10 text-red hover:bg-red/20 disabled:text-gray-1",
   outline: "border border-gray-3 text-dark hover:bg-gray-5",
   neutral: "bg-gray-5 hover:bg-gray-4 text-dark disabled:text-gray-1",

@@ -11,13 +11,14 @@
         <div class="flex gap-3">
           <div class="flex items-end flex-col">
             <p class="font-semibold">
-              {{ user?.name }}
+              {{ user()?.name }}
             </p>
-            <p class="text-gray-10">{{ $t("roles." + user?.role) }}</p>
+
+            <p class="text-gray-700">{{ $t("roles." + user()?.role) }}</p>
           </div>
           <BaseAvatar
-            avatar-class="!w-[50px] !h-[50px] object-cover"
-            :image="'/images/default/avatar.svg'"
+            avatar-class="!w-[50px] !h-[50px] object-cover p-2"
+            image="https://www.svgrepo.com/show/452030/avatar-default.svg"
           />
         </div>
       </template>
@@ -47,7 +48,6 @@ import { defineComponent, ref } from "vue";
 
 import BaseAvatar from "@/components/Base/Avatar/BaseAvatar.vue";
 import BaseDropdown from "@/components/Base/Dropdown/BaseDropdown.vue";
-import type { IAuthUser } from "@/types/auth";
 import { useAuth } from "@/modules/auth";
 
 defineComponent({
@@ -55,7 +55,6 @@ defineComponent({
 });
 
 interface Props {
-  user?: IAuthUser;
   isAuth?: boolean;
   profileItems?: {
     title: string;

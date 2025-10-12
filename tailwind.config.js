@@ -19,6 +19,7 @@ export default {
         "yellow-1": "#f39c12",
         red: "#f74c39",
         blue: "#347bdf",
+        "blue-dark": "#111e2b",
         "blue-1": "#047bf3",
         violet: "#8938fa",
         orange: "#e59500",
