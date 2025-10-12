@@ -54,14 +54,15 @@
                 ).test(location),
               }"
               :to="menuItem?.route"
-              class="py-3 px-5 hover:bg-blue-200/10 transition-300 flex items-center group gap-3 h-12"
+              class="py-3 px-5 hover:bg-blue/10 transition-300 flex items-center group gap-3 h-12 group"
               @click="openMenu(index)"
             >
               <i
                 :class="[
+                  'group-hover:!text-blue',
                   menuItem?.svgIcon,
                   {
-                    '!text-primary': createRoutePattern(
+                    '!text-blue': createRoutePattern(
                       menuItem.route.toString()
                     ).test(location),
                   },
