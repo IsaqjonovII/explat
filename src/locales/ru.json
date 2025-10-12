@@ -37,6 +37,7 @@
     }
   },
   "form": {
+    "search": "Поиск",
     "pagination": {
       "show": "Показать"
     },

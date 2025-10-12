@@ -28,7 +28,7 @@
         <!--        <Notifications v-if="authStore.hasUser" class="px-4" />-->
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-2">
-            <span class="text-sm text-gray-600">{{ $t("welcome") }},</span>
+            <!-- <span class="text-sm text-gray-600">{{ $t("welcome") }},</span>
             <span class="text-sm font-medium text-dark">{{
               user?.name || "User"
             }}</span>
@@ -36,7 +36,7 @@
               class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full"
             >
               {{ user?.role }}
-            </span>
+            </span> -->
           </div>
           <div class="flex items-center gap-2">
             {{ $t("course") }}

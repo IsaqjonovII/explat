@@ -14,8 +14,11 @@
               {{ user()?.name }}
             </p>
 
-            <p class="text-gray-700">{{ $t("roles." + user()?.role) }}</p>
+            <p class="text-gray-700">
+              {{ $t("roles." + user()?.role) }}
+            </p>
           </div>
+
           <BaseAvatar
             avatar-class="!w-[50px] !h-[50px] object-cover p-2"
             image="https://www.svgrepo.com/show/452030/avatar-default.svg"
