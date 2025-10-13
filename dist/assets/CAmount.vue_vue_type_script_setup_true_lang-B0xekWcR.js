@@ -1,0 +1,1 @@
+import{d as s,g as t,o as a,b as o,t as r,u as c,q as e}from"./index-BAoS1bkF.js";const n={class:"text-base font-semibold"},p={class:"text-xs text-gray-1"},u=s({__name:"CAmount",props:{amount:{},currency:{},crypto:{}},setup:s=>(u,m)=>(a(),t("div",null,[o("p",n,r(c(e)(s.amount))+" "+r(s.currency),1),o("p",p,r(c(e)(s.crypto.amount))+" "+r(s.crypto.currency),1)]))});export{u as _};
