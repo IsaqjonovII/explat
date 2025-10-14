@@ -21,3 +21,6 @@ export { default as CReqisites } from "@/components/Common/MiniComponents/CRequi
 export { default as CBadge } from "@/components/Common/MiniComponents/CBadge.vue";
 export { default as CDate } from "@/components/Common/MiniComponents/CDate.vue";
 export { default as CLimitIndicator } from "@/components/Common/MiniComponents/CLimitIndicator.vue";
+
+//Language Switcher
+export { default as LanguageSwitcher } from "@/components/Common/LanguageSwitcher/LanguageSwitcher.vue";

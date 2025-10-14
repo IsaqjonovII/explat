@@ -93,13 +93,10 @@
           </div>
         </template>
       </BaseTable>
-      <BaseModal :title="$t('devices.add')" v-model="addDeviceOpen">
-        <figure class="bg-primary p-5">
-          <img src="/images/qr-code.png" alt="qr" />
-        </figure>
-        <p class="text-center">ASdle19uh2aAD2d23dasd424f8eisdkh244wie</p>
-        <BaseButton :text="$t('copy')" />
-      </BaseModal>
+      <AddDeviceModal
+        v-model="addDeviceOpen"
+        @device-created="handleDeviceCreated"
+      />
     </div>
 
     <!-- Device Details Modal -->
@@ -119,6 +116,7 @@ import { BaseTable, BaseButton, BaseModal } from "@/components/Base";
 import FilterDateRange from "@/components/Base/Form/DatePicker/FilterDateRange.vue";
 import FormFilterLabel from "@/components/Base/Form/Label/FormFilterLabel.vue";
 import DeviceDetailsModal from "@/modules/devices/components/DeviceDetailsModal.vue";
+import AddDeviceModal from "@/modules/devices/components/AddDeviceModal.vue";
 import {
   tableHead,
   tableSettings,
@@ -165,6 +163,11 @@ function openDeviceDetails(device: IDevice) {
 
 function onDeviceLoaded(device: IDevice) {
   console.log("Device loaded:", device);
+}
+
+function handleDeviceCreated(device: IDevice) {
+  console.log("Device created:", device);
+  refetch(); // Refresh the table
 }
 
 // Device management functions

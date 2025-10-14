@@ -32,5 +32,27 @@
   },
   "statuses": {
     "all_statuses": "Barcha holatlar"
-  }
+  },
+  "menu": {
+    "sidebar": {
+      "main": "Boshqaruv paneli",
+      "traders": "Treydlar",
+      "orders": "Buyurtmalar",
+      "appeals": "Shikoyatlar",
+      "requisites": "Rekvizitlar",
+      "balance": "Balans",
+      "devices": "Qurilmalar",
+      "notifications": "Bildirishnomalar",
+      "download": "Parser yuklab olish",
+      "merchants": "Savdogarlar",
+      "viplating": "To'lovlar",
+      "admins": "Administratorlar"
+    },
+    "breadcrumb": {
+      "home": "Bosh sahifa"
+    }
+  },
+  "course": "Garantex kursi",
+  "privacy_policy": "Maxfiylik siyosati",
+  "version": "Versiya"
 }

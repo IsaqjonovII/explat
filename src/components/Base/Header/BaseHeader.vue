@@ -24,7 +24,7 @@
         </li>
       </ul>
       <div class="flex items-center gap-4 divide-x divide-[#F6F8FA]">
-        <!--        <LanguageSwitche class="pr-4" variant="transparent"/>-->
+        <LanguageSwitcher class="pr-4" />
         <!--        <Notifications v-if="authStore.hasUser" class="px-4" />-->
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-2">
@@ -58,7 +58,7 @@
 </template>
 <script lang="ts" setup>
 import BaseHeaderProfile from "@/components/Base/Header/details/BaseHeaderProfile.vue";
-import { CBalance } from "@/components/Common";
+import { CBalance, LanguageSwitcher } from "@/components/Common";
 import { ref } from "vue";
 import { useAuth } from "@/modules/auth";
 

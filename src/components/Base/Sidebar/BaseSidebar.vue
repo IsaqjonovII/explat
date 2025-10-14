@@ -5,11 +5,11 @@
   />
   <div
     :class="[isOpen || hovered ? 'w-64' : 'w-20']"
-    class="h-screen bg-dark transition-300 fixed flex flex-col justify-between z-30 overflow-hidden"
+    class="h-screen transition-300 fixed flex flex-col justify-between z-30 overflow-hidden bg-blue-dark"
     @mouseenter="hovered = true"
     @mouseleave="hovered = false"
   >
-    <div class="z-20">
+    <div class="z-20 h-full">
       <div
         class="w-full px-4 py-5 flex items-center justify-center border-b border-solid border-white/10 bg-transparent"
       >
@@ -39,7 +39,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col py-5 overflow-y-auto">
+      <div class="flex flex-col py-5 overflow-y-auto flex-1 h-full">
         <div v-for="(menuItem, index) in menu" :key="index">
           <div v-if="menuItem?.meta?.includes(authStore?.role)">
             <div
@@ -49,7 +49,7 @@
             <RouterLink
               v-if="!menuItem?.sub?.length"
               :class="{
-                '!bg-primary/10': createRoutePattern(
+                '!bg-blue/10': createRoutePattern(
                   menuItem.route.toString()
                 ).test(location),
               }"
@@ -67,7 +67,7 @@
                     ).test(location),
                   },
                 ]"
-                class="text-xl text-gray-100 group-hover:!text-primary transition-300"
+                class="text-xl text-gray-100 group-hover:!text-blue transition-300"
               />
               <CollapseTransition :duration="300" dimension="width">
                 <p
@@ -102,12 +102,12 @@
                     :class="[
                       menuItem?.svgIcon,
                       {
-                        '!text-primary':
+                        '!text-blue':
                           location === menuItem?.route ||
                           isActiveSub(menuItem?.sub),
                       },
                     ]"
-                    class="text-xl text-gray-100 group-hover:!text-primary transition-300"
+                    class="text-xl text-gray-100 group-hover:!text-blue transition-300"
                   />
                   <CollapseTransition :duration="300" dimension="width">
                     <p

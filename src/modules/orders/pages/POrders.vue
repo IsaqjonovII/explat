@@ -4,10 +4,10 @@
       <BaseTable
         :data="tableData"
         :head="tableHead()"
-        :loading="loading"
+        :loading="isLoading"
         :title="$t('orders.title')"
-        :subtitle="$t('orders.count', { count: paginationData.total })"
-        :total="paginationData.total"
+        :subtitle="$t('orders.count', { count: pagination?.count || 0 })"
+        :total="pagination?.count || 0"
         :filter="{ status }"
         v-bind="tableSettings()"
         @click-to-row="openTransaction"
@@ -21,26 +21,19 @@
           </div>
         </template>
         <template #amount="{ data }">
-          <CAmount
-            :amount="data?.amount?.amount"
-            :currency="data?.amount?.currency"
-            :crypto="{
-              amount: data?.amount?.crypto?.USDT?.amount,
-              currency: data?.amount?.crypto?.USDT?.currency,
-            }"
-          />
+          <CAmount :amount="data?.amount" :currency="'₽'" />
         </template>
 
         <template #device="{ data }">
-          <CDevice :title="data?.device?.title" :id="data?.device?.id" />
+          <CDevice :title="'Device'" :id="data?.id" />
         </template>
 
         <template #payment_method="{ data }">
           <CReqisites
-            :number="data?.requisite?.number"
-            :name="data?.requisite?.name"
-            :bank="data?.requisite?.bank"
-            :payment_method="data?.requisite?.payment_method"
+            :number="data?.external_id"
+            :name="'Order'"
+            :bank="'System'"
+            :payment_method="data?.purpose"
           />
         </template>
 
@@ -49,12 +42,7 @@
         </template>
 
         <template #date="{ data }">
-          <CDate
-            :pending_date="data?.pending_date"
-            :pending_time="data?.pending_time"
-            :date="data?.created_at"
-            :time="data?.created_at"
-          />
+          <CDate :date="data?.created_at" :time="data?.created_at" />
         </template>
 
         <template #filter>
@@ -80,11 +68,12 @@
         </template>
       </BaseTable>
     </div>
-    <!--    <InfoModal-->
-    <!--      :data="transactionModalItem"-->
-    <!--      :modal-value="transactionModal"-->
-    <!--      @close="transactionModal = false"-->
-    <!--    />-->
+
+    <!-- Order Details Modal -->
+    <OrderDetailsModal
+      v-model="orderDetailsModal"
+      :order-uid="selectedOrderUid"
+    />
   </section>
 </template>
 
@@ -108,260 +97,33 @@ import {
   CDate,
 } from "@/components/Common";
 import { useI18n } from "vue-i18n";
+import { useTableFetch } from "@/composables/useTableFetch";
+import type { IOrder } from "@/modules/orders/api/ordersApi";
+import OrderDetailsModal from "@/modules/orders/components/OrderDetailsModal.vue";
 
 const { t } = useI18n();
 
 const status = useRouteQuery("status", t("statuses.all_statuses"));
 
-const loading = ref(false);
+// Prepare initial parameters for API filtering
+const getInitialParams = () => {
+  const params: Record<string, string> = {};
+  if (status.value && status.value !== t("statuses.all_statuses")) {
+    params["status"] = status.value;
+  }
+  return params;
+};
 
-const tableData = ref([
-  {
-    id: 37351,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "success",
-  },
-  {
-    id: 37352,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "pending",
-  },
-  {
-    id: 37352,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "canceled",
-  },
-  {
-    id: 37351,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "success",
-  },
-  {
-    id: 37352,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "pending",
-  },
-  {
-    id: 37352,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "canceled",
-  },
-  {
-    id: 37351,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "success",
-  },
-  {
-    id: 37352,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "pending",
-  },
-  {
-    id: 37352,
-    amount: {
-      currency: "₽",
-      amount: 8600,
-      crypto: {
-        USDT: {
-          amount: 76,
-          currency: "USDT",
-        },
-      },
-    },
-    requisite: {
-      number: 1234123412341234,
-      name: "Х.Алмамедов",
-      bank: "Сбербанк",
-      payment_method: "TPay",
-    },
-    device: {
-      id: 24133,
-      title: "Xiaomi Redmi",
-    },
-    created_at: "2025-07-17T10:30:00",
-    end_at: "2025-07-17T10:30:00",
-    status: "canceled",
-  },
-]);
+// Use the table fetch composable
+const { tableData, pagination, isLoading, onPageChange, refetch } =
+  useTableFetch<IOrder>("/explat/orders/", getInitialParams(), ["tab"]);
 
-const paginationData = ref({
-  total: tableData.value.length,
-});
+const orderDetailsModal = ref(false);
+const selectedOrderUid = ref<string>("");
 
-const transactionModal = ref(false);
-const transactionModalItem = ref({});
-
-function openTransaction(d: unknown) {
-  transactionModal.value = true;
-  transactionModalItem.value = d;
+function openTransaction(order: IOrder) {
+  selectedOrderUid.value = order.uid;
+  orderDetailsModal.value = true;
 }
 </script>
 
