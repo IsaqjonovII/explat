@@ -14,14 +14,4 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  base: "./",
-  build: {
-    sourcemap: false,
-    minify: "terser",
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
-  },
 });
