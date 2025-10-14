@@ -1,1 +1,0 @@
-import{f as o,g as s,o as t,h as c}from"./index-8FvB9lgi.js";const n={},r={class:"bg-gray-300 min-h-screen flex-center-between flex-col"};function a(e,l){return t(),s("div",r,[c(e.$slots,"default")])}const _=o(n,[["render",a]]);export{_ as default};
