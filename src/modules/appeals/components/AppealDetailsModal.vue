@@ -179,6 +179,7 @@ import { BaseModal, BaseButton } from "@/components/Base";
 import { useI18n } from "vue-i18n";
 import { formatDateTime } from "@/utils/functions/common";
 import type { IAppeal } from "../api/appealsApi";
+import { appealsApi } from "../api/appealsApi";
 import { useCustomToast } from "@/composables/useCustomToast";
 
 interface Props {
@@ -207,23 +208,29 @@ const handleClose = () => {
   appeal.value = null;
 };
 
-const handleApprove = () => {
-  // In a real implementation, you would call an API to approve the appeal
-  showToast("success", t("appeals.approved_successfully"));
-  // Update the appeal status locally
-  if (appeal.value) {
-    appeal.value.status = "accepted";
-    emit("appeal-updated", appeal.value);
+const handleApprove = async () => {
+  if (!appeal.value) return;
+
+  try {
+    const updatedAppeal = await appealsApi.approveAppeal(appeal.value.uid);
+    showToast(t("appeals.approved_successfully"), "success");
+    appeal.value = updatedAppeal;
+    emit("appeal-updated", updatedAppeal);
+  } catch {
+    showToast(t("appeals.approve_failed"), "error");
   }
 };
 
-const handleReject = () => {
-  // In a real implementation, you would call an API to reject the appeal
-  showToast("success", t("appeals.rejected_successfully"));
-  // Update the appeal status locally
-  if (appeal.value) {
-    appeal.value.status = "rejected";
-    emit("appeal-updated", appeal.value);
+const handleReject = async () => {
+  if (!appeal.value) return;
+
+  try {
+    const updatedAppeal = await appealsApi.rejectAppeal(appeal.value.uid);
+    showToast(t("appeals.rejected_successfully"), "success");
+    appeal.value = updatedAppeal;
+    emit("appeal-updated", updatedAppeal);
+  } catch {
+    showToast(t("appeals.reject_failed"), "error");
   }
 };
 
@@ -243,10 +250,14 @@ const getStatusClass = (status: string) => {
 // Watch for modal opening to load appeal details
 watch(
   () => props.modelValue,
-  (isOpen) => {
+  async (isOpen) => {
     if (isOpen && props.appealUid) {
-      // In a real implementation, you would load appeal details here
-      // For now, we'll just show the modal
+      try {
+        appeal.value = await appealsApi.getAppeal(props.appealUid);
+      } catch {
+        showToast(t("appeals.load_failed"), "error");
+        handleClose();
+      }
     }
   }
 );

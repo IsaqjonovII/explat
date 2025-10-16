@@ -6,8 +6,11 @@
         :head="tableHead()"
         :loading="isLoading"
         :title="$t('appeals.title')"
-        :subtitle="$t('appeals.count', { count: pagination?.count || 0 })"
-        :total="pagination?.count || 0"
+        :has-add-button="{
+          show: false,
+        }"
+        :subtitle="$t('appeals.count', { count: pagination?.total || 0 })"
+        :total="pagination?.total || 0"
         :filter="{ status }"
         v-bind="tableSettings()"
         @click-to-row="openTransaction"
@@ -20,8 +23,12 @@
             </span>
           </div>
         </template>
-        <template #amount="{ data }">
-          <CAmount :amount="0" :currency="'₽'" />
+        <template #amount>
+          <CAmount
+            :amount="0"
+            :currency="'₽'"
+            :crypto="{ amount: 0, currency: '₽' }"
+          />
         </template>
 
         <template #device="{ data }">
@@ -87,9 +94,12 @@ import DateTime from "@/components/Common/DateTime.vue";
 import CAction from "@/components/Common/MiniComponents/CAction.vue";
 import { useTableFetch } from "@/composables/useTableFetch";
 import type { IAppeal } from "@/modules/appeals/api/appealsApi";
+import { appealsApi } from "@/modules/appeals/api/appealsApi";
 import AppealDetailsModal from "@/modules/appeals/components/AppealDetailsModal.vue";
+import { useCustomToast } from "@/composables/useCustomToast";
 
 const { t } = useI18n();
+const { showToast } = useCustomToast();
 
 const status = useRouteQuery("status", t("statuses.all_statuses"));
 
@@ -103,14 +113,30 @@ const getInitialParams = () => {
 };
 
 // Use the table fetch composable
-const { tableData, pagination, isLoading, onPageChange, refetch } =
-  useTableFetch<IAppeal>("/explat/appeals/", getInitialParams(), ["tab"]);
+const { tableData, pagination, isLoading, refetch } = useTableFetch<IAppeal>(
+  "/explat/appeals/",
+  getInitialParams(),
+  ["tab"]
+);
 
-const approve = () => {
-  console.log("asd");
+const approve = async (appeal: IAppeal) => {
+  try {
+    await appealsApi.approveAppeal(appeal.uid);
+    showToast(t("appeals.approved_successfully"), "success");
+    refetch(); // Refresh the table
+  } catch {
+    showToast(t("appeals.approve_failed"), "error");
+  }
 };
-const reject = (data: object) => {
-  console.log(data);
+
+const reject = async (appeal: IAppeal) => {
+  try {
+    await appealsApi.rejectAppeal(appeal.uid);
+    showToast(t("appeals.rejected_successfully"), "success");
+    refetch(); // Refresh the table
+  } catch {
+    showToast(t("appeals.reject_failed"), "error");
+  }
 };
 
 const appealDetailsModal = ref(false);

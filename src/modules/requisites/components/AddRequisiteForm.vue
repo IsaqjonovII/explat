@@ -109,6 +109,7 @@ import {
   type IPaymentMethod,
 } from "../api/requisitesApi";
 import { useCustomToast } from "@/composables/useCustomToast";
+import { devicesApi } from "@/modules/devices/api/devicesApi";
 
 const modelValue = defineModel<boolean>();
 const { showToast } = useCustomToast();
@@ -138,6 +139,7 @@ const form = useForm(
 
 const banks = ref<{ label: string; value: string }[]>([]);
 const payment_method = ref<{ label: string; value: string }[]>([]);
+const devices = ref<{ label: string; value: string }[]>([]);
 const isLoading = ref(false);
 
 // Load banks and payment methods from API
@@ -157,6 +159,13 @@ onMounted(async () => {
     payment_method.value = paymentMethodsData.map((method) => ({
       label: method.name,
       value: method.id.toString(),
+    }));
+
+    // Load devices
+    const devicesData = await devicesApi.getDevices();
+    devices.value = devicesData.results.map((device) => ({
+      label: device.name || `Device ${device.id}`,
+      value: device.id.toString(),
     }));
   } catch (error) {
     console.error("Error loading form data:", error);

@@ -34,4 +34,18 @@ export const appealsApi = {
   getAppeal: async (uid: string): Promise<IAppeal> => {
     return apiService.$get<IAppeal>(`/explat/appeals/${uid}/`);
   },
+
+  // Approve appeal (update status to accepted)
+  approveAppeal: async (uid: string): Promise<IAppeal> => {
+    return apiService.$patch<IAppeal>(`/explat/appeals/${uid}/`, {
+      status: "accepted",
+    });
+  },
+
+  // Reject appeal (update status to rejected)
+  rejectAppeal: async (uid: string): Promise<IAppeal> => {
+    return apiService.$patch<IAppeal>(`/explat/appeals/${uid}/`, {
+      status: "rejected",
+    });
+  },
 };

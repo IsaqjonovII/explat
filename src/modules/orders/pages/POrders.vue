@@ -5,6 +5,9 @@
         :data="tableData"
         :head="tableHead()"
         :loading="isLoading"
+        :has-add-button="{
+          show: false,
+        }"
         :title="$t('orders.title')"
         :subtitle="$t('orders.count', { count: pagination?.count || 0 })"
         :total="pagination?.count || 0"

@@ -45,8 +45,13 @@
 
             <slot name="afterSearch">
               <RouterLink
-                v-if="hasAddButton && addLink && data?.length"
-                :to="addLink"
+                v-if="
+                  hasAddButton &&
+                  hasAddButton.link &&
+                  data?.length &&
+                  hasAddButton.show
+                "
+                :to="hasAddButton.link"
               >
                 <BaseButton type="button" variant="info">
                   <div class="flex items-center gap-1">
@@ -247,9 +252,9 @@
                         subtitle: noData?.subtitle ?? $t('no_data.subtitle'),
                         image: noData?.image ?? '/images/no-data/no-data.svg',
                         icon: noData?.icon,
-                        addLink,
-                        hasActions: noData?.hasAction,
-                        text: noData?.addButtonText ?? 'button.add',
+                        addLink: hasAddButton?.link,
+                        hasActions: hasAddButton?.show,
+                        text: hasAddButton?.title ?? 'button.add',
                       }"
                       @addLink="$emit('addLink')"
                     />

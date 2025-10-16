@@ -7,7 +7,7 @@
         :hasAddButton="{
           title: $t('add_requisite'),
         }"
-        @add="addRequisite"
+        @addLink="addRequisite"
         :loading="isLoading"
         :title="$t('requisites.title')"
         :subtitle="$t('requisites.count', { count: pagination.total })"
@@ -59,11 +59,58 @@
         </template>
 
         <template #actions="{ data }">
-          <BaseButton
-            class="min-w-[200px]"
-            :variant="data?.status"
-            :text="$t('conditions.' + data?.status)"
-          />
+          <div class="flex items-center gap-2">
+            <BaseButton
+              class="min-w-[120px]"
+              :variant="data?.status"
+              :text="$t('conditions.' + data?.status)"
+            />
+            <div class="flex gap-1">
+              <!-- Activate/Deactivate Button -->
+              <BaseButton
+                v-if="data?.status === 'deactivated'"
+                variant="outline"
+                size="sm"
+                @click="activateRequisite(data)"
+                class="px-2 text-green-600 hover:text-green-700"
+                :title="$t('requisites.activate')"
+              >
+                <i class="icon-check text-sm" />
+              </BaseButton>
+              <BaseButton
+                v-else-if="data?.status === 'activated'"
+                variant="outline"
+                size="sm"
+                @click="deactivateRequisite(data)"
+                class="px-2 text-orange-600 hover:text-orange-700"
+                :title="$t('requisites.deactivate')"
+              >
+                <i class="icon-pause text-sm" />
+              </BaseButton>
+
+              <!-- Edit Button -->
+              <BaseButton
+                variant="outline"
+                size="sm"
+                @click="editRequisite(data)"
+                class="px-2"
+                :title="$t('requisites.edit')"
+              >
+                <i class="icon-edit text-sm" />
+              </BaseButton>
+
+              <!-- Delete Button -->
+              <BaseButton
+                variant="outline"
+                size="sm"
+                @click="deleteRequisite(data)"
+                class="px-2 text-red-500 hover:text-red-700"
+                :title="$t('requisites.delete')"
+              >
+                <i class="icon-trash text-sm" />
+              </BaseButton>
+            </div>
+          </div>
         </template>
 
         <template #filter>
@@ -89,6 +136,11 @@
         </template>
       </BaseTable>
       <AddRequisiteForm v-model="addRequisiteModal" />
+      <EditRequisiteForm
+        v-model="editRequisiteModal"
+        :requisite="selectedRequisite"
+        @requisite-updated="handleRequisiteUpdated"
+      />
     </div>
     <!--    <InfoModal-->
     <!--      :data="transactionModalItem"-->
@@ -106,6 +158,7 @@ import { BaseButton, BaseTable, FormSelect } from "@/components/Base";
 import FilterDateRange from "@/components/Base/Form/DatePicker/FilterDateRange.vue";
 import FormFilterLabel from "@/components/Base/Form/Label/FormFilterLabel.vue";
 import AddRequisiteForm from "@/modules/requisites/components/AddRequisiteForm.vue";
+import EditRequisiteForm from "@/modules/requisites/components/EditRequisiteForm.vue";
 import {
   tableHead,
   tableSettings,
@@ -115,9 +168,12 @@ import { CAmount, CReqisites, CLimitIndicator } from "@/components/Common";
 import { useI18n } from "vue-i18n";
 import { useTableFetch } from "@/composables/useTableFetch";
 import type { IRequisite } from "@/modules/requisites/api/requisitesApi";
+import { requisitesApi } from "@/modules/requisites/api/requisitesApi";
+import { useCustomToast } from "@/composables/useCustomToast";
 import { onMounted, onUnmounted } from "vue";
 
 const { t } = useI18n();
+const { showToast } = useCustomToast();
 
 const status = useRouteQuery("status", t("conditions.all"));
 
@@ -139,8 +195,50 @@ const { tableData, pagination, isLoading, onPageChange, refetch } =
   );
 
 const addRequisiteModal = ref(false);
+const editRequisiteModal = ref(false);
+const selectedRequisite = ref<IRequisite | null>(null);
+
 const addRequisite = () => {
   addRequisiteModal.value = true;
+};
+
+const editRequisite = (requisite: IRequisite) => {
+  selectedRequisite.value = requisite;
+  editRequisiteModal.value = true;
+};
+
+const deleteRequisite = async (requisite: IRequisite) => {
+  if (confirm(t("requisites.confirm_delete"))) {
+    try {
+      await requisitesApi.deleteRequisite(requisite.uid);
+      showToast(t("requisites.deleted_successfully"), "success");
+      refetch();
+    } catch {
+      showToast(t("requisites.delete_failed"), "error");
+    }
+  }
+};
+
+const activateRequisite = async (requisite: IRequisite) => {
+  try {
+    await requisitesApi.activateRequisite(requisite.uid);
+    showToast(t("requisites.activated_successfully"), "success");
+    refetch();
+  } catch {
+    showToast(t("requisites.activate_failed"), "error");
+  }
+};
+
+const deactivateRequisite = async (requisite: IRequisite) => {
+  try {
+    await requisitesApi.patchRequisite(requisite.uid, {
+      status: "deactivated",
+    });
+    showToast(t("requisites.deactivated_successfully"), "success");
+    refetch();
+  } catch {
+    showToast(t("requisites.deactivate_failed"), "error");
+  }
 };
 
 const transactionModal = ref(false);
@@ -154,6 +252,12 @@ function openTransaction(d: unknown) {
 // Listen for refresh events from the form
 const handleRequisiteCreated = () => {
   refetch();
+};
+
+const handleRequisiteUpdated = () => {
+  refetch();
+  editRequisiteModal.value = false;
+  selectedRequisite.value = null;
 };
 
 onMounted(() => {

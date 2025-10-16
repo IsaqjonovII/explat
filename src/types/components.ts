@@ -77,8 +77,9 @@ export interface TableProps<D> {
   activeCount?: number;
   head: TableHead[];
   hasAddButton?: {
-    title: string;
-    link: string;
+    title?: string;
+    link?: string;
+    show?: boolean;
   };
   title?: string;
   hasFilter?: boolean;
