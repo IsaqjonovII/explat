@@ -1,8 +1,11 @@
 {
   "builds": [
     {
-      "src": "index.html",
-      "use": "@vercel/static-build"
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "routes": [
@@ -11,5 +14,6 @@
       "dest": "/index.html"
     }
   ],
-  "outputDirectory": "dist"
+  "installCommand": "bun install",
+  "buildCommand": "bun run build"
 }
