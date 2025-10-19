@@ -9,6 +9,12 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    sourcemap: false,
+    minify: "terser",
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
