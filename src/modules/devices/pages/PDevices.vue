@@ -6,9 +6,9 @@
         :head="tableHead()"
         :has-add-button="{
           title: $t('devices.add'),
-          link: '#',
+          link: '',
         }"
-        @add="addDevice"
+        @addLink="addDevice"
         :loading="isLoading"
         :title="$t('devices.title')"
         :subtitle="$t('devices.count', { count: pagination.total })"
